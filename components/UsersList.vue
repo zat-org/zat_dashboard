@@ -6,7 +6,7 @@
         v-if="roletransform.Roles && roletransform"
         multiple
         placeholder="اختر الفئة "
-        v-model=" role"
+        v-model="role"
         :options="roletransform.Roles"
         option-attribute="name"
         value-attribute="id" /> 
@@ -51,7 +51,7 @@ const roletransform = useRoletransform();
 
 
 // role filter
-const role = ref<any[]>([]);
+const role = ref<{id:number,name:string,color:string}[]>([]);
 // to handel filter
 const q = ref("");
 const searchFilter = computed(() => {
@@ -74,7 +74,9 @@ const roleFilter = computed(() => {
   }
   return searchFilter.value?.filter((admin) => {
     console.log(role.value);
-    return role.value.includes(admin.role);
+    return role.value.forEach(role=>{
+     return role.id ==admin.role
+    });
   });
 });
 const filtrdRow = computed(() => {
