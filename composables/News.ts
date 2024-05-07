@@ -12,7 +12,7 @@ export const useNews = () => {
         $api("/news", {
           headers: { "Content-Type": "multipart/form-data"},
           method: "POST",
-          body: formData,
+          body: formData.value,
         }),
       { immediate: false }
     );
