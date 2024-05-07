@@ -71,13 +71,10 @@ const onSubmit = async () => {
 
   if (error.value) {
 // there is erro
-  console.log((error.value as NuxtError).data)
-  // console.log((error.value as NuxtError).name)
 }
 if(data.value){
   // every thing is ok 
 // saver user in pinia
-  console.log(data.value)
   authStore.login(data.value.data);
   // navigatye to main page
   router.push("/");

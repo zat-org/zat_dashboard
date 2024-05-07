@@ -37,7 +37,7 @@ const links = computed(()=> [
       iconClass:"text-lg md:text-2xl ",
         icon: "i-heroicons-user-circle-solid" ,
         click:authStore.isauth? logout : null  ,
-        to: authStore.isauth?"login":"login"
+        to: authStore.isauth?"/login":"/login"
       },
     ]
 ])

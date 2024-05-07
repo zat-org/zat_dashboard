@@ -27,7 +27,7 @@ export const messagesTypes = () => {
     return Object.entries(MessageType).filter(([name, id]) => isNaN(Number(name))).map(([name, id]) => ({ name, id }))
 
 }
-
+// TODO add note to model
 export interface IMessage {
     id: string,
     name: string,
@@ -36,6 +36,6 @@ export interface IMessage {
     type: MessageType,
     isHandled: boolean,
     isArchived: boolean,
-    class?: string
+    notes?: string
 
 }

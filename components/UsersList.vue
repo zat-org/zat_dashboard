@@ -47,7 +47,6 @@ const adminApi = useAdminUser();
 const adminStore =  useAdminUsersStore();
 const { data, error, pending, refresh } = await adminApi.getAllAdmins();
 const roletransform = useRoletransform();
-// console.log(roletransform.Roles);
 
 
 // role filter
@@ -55,7 +54,6 @@ const role = ref<{id:number,name:string,color:string}[]>([]);
 // to handel filter
 const q = ref("");
 const searchFilter = computed(() => {
-  // console.log(adminStore.users);
   if (!q.value) {
     return data.value?.data;
   }
@@ -73,7 +71,6 @@ const roleFilter = computed(() => {
     return searchFilter.value;
   }
   return searchFilter.value?.filter((admin) => {
-    console.log(role.value);
     return role.value.forEach(role=>{
      return role.id ==admin.role
     });

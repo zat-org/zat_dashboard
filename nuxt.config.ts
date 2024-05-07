@@ -1,9 +1,18 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import { resolve } from 'path';
+
 export default defineNuxtConfig({
   devtools: { enabled: false },
 
-  modules: ['@nuxt/ui', '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt',],
+  modules: [
+    '@nuxt/ui',
+    '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
+    '@nuxtjs/mdc',
+    'nuxt-monaco-editor',
+    '@samk-dev/nuxt-vcalendar',
+    'nuxt-file-storage'
+    // '@nuxtjs/tailwindcss'
+  ],
   css: ["~/assets/css/base.css"],
   alias: {
     // '@' : resolve(__dirname,'/'),
@@ -18,6 +27,17 @@ export default defineNuxtConfig({
   piniaPersistedstate: {
     storage: 'localStorage'
   },
-  ssr:false,
-
+  ssr: false,
+  mdc: {
+    components: {
+      prose: false, // Disable predefined prose components
+     
+    }
+  }
+  // postcss: {
+  //   plugins: {
+  //     tailwindcss: {},
+  //     autoprefixer: {},
+  //   },
+  // },
 })

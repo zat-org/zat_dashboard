@@ -29,7 +29,6 @@ export const useAuthStore = defineStore('auth', () => {
     })
     const token_data = computed(() => {
         const decoded = jwtDecode(user.value);
-        console.log(decoded)
         return decoded
 
     })

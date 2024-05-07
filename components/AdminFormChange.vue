@@ -56,7 +56,6 @@ const response = await adminApi.updateAdmin(
 const onSubmit = async () => {
   await  response.execute()
   form_error.value=null
-  console.log(state);
   if (response.error.value) {
     switch (response.error.value.statusCode) {
       case 400:

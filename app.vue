@@ -1,20 +1,27 @@
 <template>
-  <div dir="rtl" class="h-[100dvh] w-full flex flex-col page">
+  <div
+    dir="rtl"
+    class="h-dvh w-full flex flex-col page dark:bg-[#121212] dark">
     <Nav />
-    <div class="flex h-full w-full ">
-      <SideBar v-if="authStore.isauth" />
-      
+    <UContainer class="w-full h-full grow pb-5">
+      <!-- <div > -->
+      <div class="flex h-full w-full">
+        <SideBar v-if="authStore.isauth" />
+
         <NuxtPage class="grow" />
-      
       </div>
       <UNotifications />
-      <UModals/>
-    </div>
+      <UModals />
+      <!-- </div> -->
+    </UContainer>
+  </div>
 </template>
 <script setup lang="ts">
 import { useAuthStore } from "./store/auth";
 
 const authStore = useAuthStore();
+const colorMode = useColorMode();
+colorMode.preference = "dark";
 </script>
 <style>
 .page::before {

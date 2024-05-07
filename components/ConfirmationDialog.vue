@@ -6,10 +6,10 @@
         <div class="flex justify-center  gap-5">
 
           <UButton @click="onSuccess" color="green">
-           حفظ
+           تاكيد
           </UButton>
           <UButton @click="onFail" color="red">
-           انهاء
+           الغاء
           </UButton>
         </div>
       </div>
@@ -22,6 +22,7 @@ defineProps<{message:string}>()
 const emit =defineEmits(['success'])
 const onSuccess =()=>{
   emit('success')
+  modal.close()
 }
 const modal =useModal()
 const onFail =()=>{

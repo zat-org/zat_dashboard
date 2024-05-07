@@ -41,8 +41,16 @@ const links = [
     click: sideNav.closeSideNav,
     activeClass: "text-cyan-500",
   },
+  {
+    label: "الوظائف",
+    icon: "i-heroicons-briefcase",
+    to: "/jobs",
+    labelClass: "text-lg",
+    click: sideNav.closeSideNav,
+    activeClass: "text-cyan-500",
+  },
 ];
-console.log(user.role);
+
 if (user.role == "Super") {
   links.push(userslink);
 }
@@ -50,6 +58,14 @@ links.push({
   label: "الرسائل",
   icon: "i-heroicons-chat-bubble-bottom-center-text",
   to: "/messages",
+  click: sideNav.closeSideNav,
+  labelClass:"",
+  activeClass:""
+});
+links.push({
+  label: "الاخبار",
+  icon: "i-heroicons-newspaper",
+  to: "/News",
   click: sideNav.closeSideNav,
   labelClass:"",
   activeClass:""
