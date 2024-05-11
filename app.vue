@@ -3,12 +3,11 @@
     dir="rtl"
     class="h-dvh w-full flex flex-col page dark:bg-[#121212] dark">
     <Nav />
-    <UContainer class="w-full h-full grow pb-5">
+    <UContainer class="w-[90%] h-full grow pb-5">
       <!-- <div > -->
-      <div class="flex h-full w-full">
+      <div class="flex grow h-full w-full">
         <SideBar v-if="authStore.isauth" />
-
-        <NuxtPage class="grow" />
+        <NuxtPage class="h-full w-full" />
       </div>
       <UNotifications />
       <UModals />

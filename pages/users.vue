@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-5 mx-5">
-    <h1 class="text-3xl font-bold text-cyan-500 mx-5">المستخدمين</h1>
+    <h1 class="text-3xl font-bold text-primary mx-5">المستخدمين</h1>
   
        <div
        class="flex flex-grow gap-5 transition-all duration-1000 border border-cyan-500 rounded-xl p-2 shadow-xl ">
