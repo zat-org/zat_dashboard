@@ -22,9 +22,8 @@ export default defineNuxtPlugin(() => {
       // }
     },
     onResponseError({ response }) {
-      if (response.status == 401) {
-        authStore.logout();
-        navigateTo("/login");
+      if (response.status === 401 ){
+        console.log("sdasdasd")
       }
     },
   });
