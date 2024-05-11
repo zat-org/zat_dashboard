@@ -10,26 +10,28 @@ export default defineNuxtPlugin(() => {
       Authorization: authStore.isauth ? `Bearer ${authStore.user}` : "",
     },
     onRequest({ request, options, error }) {
-      // if (!options.headers) {
-      //     options.headers = {}; // Ensure headers object exists
-      // }
-      // if (authStore.isauth) {
-      //     options.headers.
-      //     options.headers= {...options.headers,'Authorization':`Bearer ${authStore.user}` };
-      //     // (options.headers as Record<string, string>)[
-      //     //     "Authorization"
-      //     // ] = `Bearer ${authStore.user}`;
-      // }
+      options.headers = options.headers || {}; // Ensure headers object exists
+
+      if (authStore.isauth) {
+        // options.headers.
+        options.headers = {
+          ...options.headers,
+          Authorization: `Bearer ${authStore.user}`,
+        };
+        // (options.headers as Record<string, string>)[
+        //   "Authorization"
+        // ] = `Bearer ${authStore.user}`;
+      }
     },
     onResponseError({ response }) {
-      if (response.status === 401 ){
-        console.log("sdasdasd")
+      if (response.status === 401) {
+        console.log("sdasdasd");
       }
     },
   });
 
   return {
-    provide: { 
+    provide: {
       api: $api,
     },
   };
