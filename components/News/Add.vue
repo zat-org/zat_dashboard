@@ -36,15 +36,19 @@
                 ref="image_input"
                 type="file"
                 size="xl"
-                v-model="state.image" />
+                v-model="state.imageUrl" />
             </UFormGroup>
-            <img v-if="image_url" :src="image_url" alt="" class="h-[200px]" />
+            
+            <img v-if="image_url  " :src="image_url " alt="" class="h-[200px]" />
           </div>
         </div>
       </div>
 
       <template #footer>
-        <UButton type="submit" label="اضافه" />
+        <UButton
+          type="submit"
+          label="اضافه"
+          :loading="add_news.status.value == 'pending'" />
       </template>
     </UCard>
   </UForm>
@@ -52,6 +56,10 @@
 
 <script lang="ts" setup>
 import { object, string, boolean } from "yup";
+const newsApi = useNews();
+const toast = useToast();
+// add edit mode
+const props = defineProps<{ id?: string }>();
 const attrs = ref([
   {
     highlight: {
@@ -75,7 +83,6 @@ const display_image = (event: any) => {
     });
   }
 };
-const newsApi = useNews();
 const schema = object({
   title: string().required(),
   description: string(),
@@ -84,29 +91,59 @@ const schema = object({
   image: string(),
   isPublished: boolean().required(),
 });
-const state = reactive<{
+let state = reactive<{
   title: string;
   description: string;
   content: string;
   publishDateUtc: Date | string;
-  image: any;
+  imageUrl: any;
   isPublished: boolean;
 }>({
   title: "",
   description: "",
   content: "",
   publishDateUtc: new Date(),
-  image: null,
+  imageUrl: null,
   isPublished: true,
 });
+if (props.id) {
+  const SNews = await newsApi.getSingleNews(props.id);
+  if (SNews.status.value == "error") {
+    toast.add({ title: "cant get this News" });
+    if (SNews.error.value?.statusCode == 404) {
+      navigateTo("/news");
+    }
+  } else if (SNews.status.value == "success") {
+
+    if (SNews.data.value?.data) {
+      state.title = SNews.data.value?.data.title;
+      state.content = SNews.data.value?.data.content;
+      state.description = SNews.data.value?.data.description;
+      state.isPublished = SNews.data.value?.data.isPublished;
+      state.publishDateUtc = new Date(SNews.data.value?.data.publishDateUtc);
+      image_url.value=SNews.data.value?.data.imageUrl;
+    }
+  }
+}
 
 const add_news = await newsApi.addNews();
 const onSubmit = async (event: any) => {
-  const image = image_input.value.input as HTMLInputElement;
-  if (image.files && image.files.length > 0) {
-    state.publishDateUtc = new Date(state.publishDateUtc).toISOString();
-    await add_news.sendRequest(state, image.files[0]);
-    console.log(add_news);
+  if(props.id){
+    
+
+  }else{
+    
+
+    const image = image_input.value.input as HTMLInputElement;
+    if (image.files && image.files.length > 0) {
+      state.publishDateUtc = new Date(state.publishDateUtc).toISOString();
+      await add_news.sendRequest(state, image.files[0]);
+    }
+    if (add_news.error.value) {
+    }
+    if (add_news.data.value) {
+      toast.add({ title: "تم اضافة الخبر بنجاح" });
+    }
   }
 };
 </script>

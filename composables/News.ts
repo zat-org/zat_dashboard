@@ -6,7 +6,7 @@ export const useNews = () => {
     // const new_formData = formData.value;
     // console.log(formData.value)
     const formData = ref<FormData>(new FormData());
-    const { data, pending, error, refresh, execute } = await useAsyncData(
+    const { data, pending, error, refresh, execute,status } = await useAsyncData(
       "addNews",
       () =>
         $api("/news", {
@@ -22,7 +22,7 @@ export const useNews = () => {
         description: string;
         content: string;
         publishDateUtc: string | Date;
-        image: any;
+        imageUrl: any;
         isPublished: boolean;
       },
       image: File
@@ -38,7 +38,7 @@ export const useNews = () => {
       console.log([...formData.value]);
       await execute();
     };
-    return { data, pending, error, refresh, execute, sendRequest };
+    return { data, pending, error, refresh, execute, status,sendRequest };
   };
 
   const get_all_news = async () => {
@@ -59,13 +59,13 @@ export const useNews = () => {
     return { data, pending, error, refresh ,status};
   };
   const deleteNews  = async(id:string)=>{
-    const { data, pending, error, refresh } = await useAsyncData(
+    const { data, pending, error, refresh,execute,status } = await useAsyncData(
         '',
-        () => $api(`/news/${id}`),{
+        () => $api(`/news/${id}`,{method:'DELETE'}),{
           immediate:false
         }
     );
-    return { data, pending, error, refresh }
+    return { data, pending, error, refresh ,execute,status}
   }
   return { addNews, get_all_news ,getSingleNews,deleteNews};
 };
