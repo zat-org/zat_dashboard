@@ -1,6 +1,6 @@
 <template>
   <UForm :state="state" :schema="schema" @submit="onSubmit" class="grow">
-    <UCard :ui="{ base: 'flex flex-col h-full grow ', body: { base: 'grow' } }">
+    <UCard :ui="{ base: 'flex flex-col h-full grow border border-primary ',background:'bg-transparent dark:bg-transparent', body: { base: 'grow' } }">
       <div class="flex flex-col gap-2 justify-evenly h-[90%]">
         <div class="flex gap-2">
           <UFormGroup label="العنوان" class="grow" name="title">
@@ -45,10 +45,17 @@
       </div>
 
       <template #footer>
-        <UButton
-          type="submit"
-          label="اضافه"
-          :loading="add_news.status.value == 'pending'" />
+        <div>
+          <UButton
+          @click="router.back()"
+            label=  "عودة"
+            color="gray"
+            />
+          <UButton
+            type="submit"
+            :label=  "  id?'تعديل':'اضافه'"
+            :loading="add_news.status.value == 'pending'  || update_news.status.value == 'pending'" />
+        </div>
       </template>
     </UCard>
   </UForm>
@@ -58,6 +65,7 @@
 import { object, string, boolean } from "yup";
 const newsApi = useNews();
 const toast = useToast();
+const router  = useRouter()
 // add edit mode
 const props = defineProps<{ id?: string }>();
 const attrs = ref([
@@ -127,10 +135,28 @@ if (props.id) {
 }
 
 const add_news = await newsApi.addNews();
+const update_news = await newsApi.updateNews(props.id as string );
+
 const onSubmit = async (event: any) => {
   if(props.id){
-    
+    let file:File
+    const image = image_input.value.input as HTMLInputElement;
+    state.publishDateUtc = new Date(state.publishDateUtc).toISOString();
+    if (image.files && image.files.length > 0) {
+      file=image.files[0]
+    }else{
+      // get blob from url and return in file 
+      const response = await fetch(state.imageUrl)
+      const blob=await response.blob()
+      file = new File([blob], 'image.jpg', {type: blob.type});
+    }
 
+    await update_news.sendRequest(state,file)
+    if (add_news.error.value) {
+    }
+    if (add_news.data.value) {
+      toast.add({ title: "تم التعديل الخبر بنجاح" });
+    }
   }else{
     
 

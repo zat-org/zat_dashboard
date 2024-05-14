@@ -41,6 +41,44 @@ export const useNews = () => {
     return { data, pending, error, refresh, execute, status,sendRequest };
   };
 
+  const updateNews = async (id:string) => {
+
+    const formData = ref<FormData>(new FormData());
+    const { data, pending, error, refresh, execute,status } = await useAsyncData(
+      "updateNews",
+      () =>
+        $api(`/news/${id}`, {
+          // headers: { },
+          method: "PATCH",
+          body: formData.value,
+        }),
+      { immediate: false }
+    );
+    const sendRequest = async (
+      state: {
+        title: string;
+        description: string;
+        content: string;
+        publishDateUtc: string | Date;
+        imageUrl: any;
+        isPublished: boolean;
+      },
+      image: File
+    ) => {
+      formData.value = new FormData();
+
+      formData.value.append("content", state.content);
+      formData.value.append("title", state.title);
+      formData.value.append("description", state.description);
+      formData.value.append("publishDateUtc", state.publishDateUtc as string);
+      formData.value.append("image", image);
+      formData.value.append("isPublished", `${state.isPublished}`);
+      console.log([...formData.value]);
+      await execute();
+    };
+    return { data, pending, error, refresh, execute, status,sendRequest };
+  };
+
   const get_all_news = async () => {
     const { data, pending, error, refresh } = await useAsyncData<{
       data: INews[];
@@ -67,5 +105,5 @@ export const useNews = () => {
     );
     return { data, pending, error, refresh ,execute,status}
   }
-  return { addNews, get_all_news ,getSingleNews,deleteNews};
+  return { addNews, get_all_news ,getSingleNews,deleteNews,updateNews};
 };

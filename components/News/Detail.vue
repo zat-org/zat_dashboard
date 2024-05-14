@@ -8,13 +8,13 @@
     <UCard
       class="grow"
       :ui="{
-        base: 'flex flex-col h-fit ',
-        background: 'bg-transparent',
+        base: 'flex flex-col h-fit border border-primary ',
+        background: 'bg-transparent dark:bg-transparent',
         body: { base: 'grow' },
       }"
       v-if="selected_news.data.value">
       <template #header>
-        <div class="flex justify-between gap-5">
+        <div class="flex justify-between gap-5 ">
           <h1 class="text-3xl text-primary">
             {{ selected_news.data.value.data.title }}
           </h1>
