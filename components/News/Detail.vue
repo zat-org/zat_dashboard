@@ -38,7 +38,7 @@
             label="الصورة"
             trailing-icon="i-heroicons-photo" />
           <template #panel>
-            <div class="p-4 w-[500px] h-[500px]">
+            <div class="p-4 ">
               <img :src="selected_news.data.value.data.imageUrl" alt="" />
             </div>
           </template>

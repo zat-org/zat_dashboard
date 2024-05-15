@@ -70,6 +70,14 @@ links.push({
   labelClass:"",
   activeClass:""
 });
+links.push({
+  label: "الحكام",
+  icon: "i-heroicons-newspaper",
+  to: "/officiant",
+  click: sideNav.closeSideNav,
+  labelClass:"",
+  activeClass:""
+});
 </script>
 
 <style></style>

@@ -1,13 +1,13 @@
 <template>
   <div
     dir="rtl"
-    class="h-dvh w-full flex flex-col page dark:bg-[#121212] dark">
+    class="h-screen w-full flex flex-col page dark:bg-[#121212] dark">
     <Nav />
-    <UContainer class="w-[90%] h-full grow pb-5">
+    <UContainer class="w-[90%]  grow pb-5">
       <!-- <div > -->
       <div class="flex grow h-full w-full">
         <SideBar v-if="authStore.isauth" />
-        <NuxtPage class="h-full w-full" />
+        <NuxtPage class="grow w-full" />
       </div>
       <UNotifications />
       <UModals />

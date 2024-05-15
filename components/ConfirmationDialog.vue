@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-defineProps<{message:string}>()
+defineProps<{message:string,}>()
 const emit =defineEmits(['success'])
 const onSuccess =()=>{
   emit('success')
