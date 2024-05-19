@@ -2,9 +2,7 @@
   <!-- card -->
   <UCard
     :ui="{
-      base: 'flex flex-col  grow border border-primary ',
-      background: 'bg-transparent dark:bg-transparent',
-      body: { base: 'flex flex-col gap-2 grow' },
+  
     }">
     <UFormGroup class="">
       <UInput

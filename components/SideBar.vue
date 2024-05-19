@@ -71,9 +71,17 @@ links.push({
   activeClass:""
 });
 links.push({
-  label: "الحكام",
-  icon: "i-heroicons-newspaper",
+  label: " طلبات الحكام",
+  icon: "i-heroicons-scale-solid",
   to: "/officiant",
+  click: sideNav.closeSideNav,
+  labelClass:"",
+  activeClass:""
+});
+links.push({
+  label: "الشركاء",
+  icon: "i-heroicons-hand-thumb-up",
+  to: "/partner",
   click: sideNav.closeSideNav,
   labelClass:"",
   activeClass:""

@@ -1,6 +1,6 @@
 <template>
   <div class="grow flex flex-col gap-5">
-    <h1 class="text-3xl text-primary font-semibold hover:text-gray-500  duration-300  "@click="navigateTo('/officiant')"> الحكام</h1>
+    <h1 class="text-3xl text-primary font-semibold hover:text-gray-500  duration-300  "@click="navigateTo('/officiant')">  طلبات الحكام</h1>
     <OfficiantDetail :id='(route.params.id) as string' />
   </div>
 </template>

@@ -12,8 +12,9 @@ import { useSidenavStore } from "~/store/sidenav";
 const router = useRouter();
 const authStore = useAuthStore();
 const sideNav =useSidenavStore()
+const VisitsApi  = useVisits()
 // const authenticatd = storeToRefs(useAuthStore())
-
+const visits = await VisitsApi.getVisits()
 const logout = () => {
   authStore.logout();
   router.push("/");
@@ -28,6 +29,16 @@ const links = computed(()=> [
       iconClass:"text-lg md:text-2xl ",
       to: authStore.isauth?null:"/",
       click:authStore.isauth?sideNav.toogleSideNav:null
+    },
+  ],
+  [
+    {
+      label: `${visits.data.value?.data} زياره `,
+      labelClass: "text-lg md:text-2xl px-2",
+      icon: "i-heroicons-eye",
+      iconClass:"text-lg md:text-2xl ",
+      // to: authStore.isauth?null:"/",
+      // click:authStore.isauth?sideNav.toogleSideNav:null
     },
   ],
   [
