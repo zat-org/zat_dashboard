@@ -13,7 +13,7 @@
       </UFormGroup>
       <div class="self-center w-full flex justify-center mt-3">
         <UButton
-          :loading="pendingLogin"
+          :loading="loginREQ.status.value=='pending'"
           dir="auto"
           type="submit"
           class="w-3/4 self-center text-center"
@@ -23,7 +23,7 @@
       </div>
       <div
         class="text-xl text-red-600 flex justify-center font-semibold self-center my-5">
-        <p v-if="  errorLogin  &&  (errorLogin as NuxtError).statusCode == 401">
+        <p v-if="  error  &&  (error as NuxtError).statusCode == 401">
           ما هو يالبسورد غلط يا عماد ياما انت مش عماد
         </p>
       </div>
@@ -36,14 +36,15 @@ import { reactive } from "vue";
 import { object, string } from "yup";
 import { useAuthStore } from "../store/auth";
 import type { NuxtError } from "#app";
-
-const state = <{ userName: string | null; password: string | null }>reactive({
-  userName: null,
-  password: null,
+const authApi = useAuth()
+const state = <{ userName: string ; password: string  }>reactive({
+  userName: "",
+  password: "",
 });
 
-const { $api } = useNuxtApp();
-
+const error = computed(()=>{
+  return loginREQ.error.value
+})
 // create schema  with yup
 const schema = object({
   userName: string().required("اسم المستخدم يا صديق"),
@@ -54,33 +55,19 @@ const schema = object({
 const router = useRouter();
 const authStore = useAuthStore();
 
-const dataLogin = ref();
-const errorLogin = ref();
-const pendingLogin = ref(false);
 
+const loginREQ  = await authApi.login()
 const onSubmit = async () => {
-  const { data, error, pending } = await useAsyncData<{message:string ,data:string}>(() =>
-    $api("/auth/admin-login", {
-      method: "POST",
-      body: { userName: state.userName, password: state.password },
-    })
-  );
-  pendingLogin.value = pending.value;
-  dataLogin.value = data.value;
-  errorLogin.value = error.value;
+  await  loginREQ.fetchrequest(state)
+if (loginREQ.status.value == "error"){
 
-  if (error.value) {
-// there is erro
 }
-if(data.value){
-  // every thing is ok 
-// saver user in pinia
-  authStore.login(data.value.data);
-  // navigatye to main page
-  router.push("/");
+if (loginREQ.status.value == "success"){
+authStore.login()
+router.push('/')
 }
 
-  // auth is done
+
 
 };
 

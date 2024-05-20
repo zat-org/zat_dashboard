@@ -10,8 +10,8 @@ export default defineNuxtConfig({
     '@nuxtjs/mdc',
     'nuxt-monaco-editor',
     '@samk-dev/nuxt-vcalendar',
-    'nuxt-file-storage'
-    // '@nuxtjs/tailwindcss'
+    'nuxt-file-storage',
+    '@nuxtjs/tailwindcss'
   ],
   css: ["~/assets/css/base.css"],
   alias: {

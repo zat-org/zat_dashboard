@@ -5,6 +5,7 @@
     <Nav />
     <UContainer class="w-[90%]  grow pb-5">
       <!-- <div > -->
+        {{ token }}
       <div class="flex grow h-full w-full">
         <SideBar v-if="authStore.isauth" />
         <NuxtPage class="grow w-full" />
@@ -17,7 +18,7 @@
 </template>
 <script setup lang="ts">
 import { useAuthStore } from "./store/auth";
-
+const token = useCookie('zat_session')
 const authStore = useAuthStore();
 const colorMode = useColorMode();
 colorMode.preference = "dark";
