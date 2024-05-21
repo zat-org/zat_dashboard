@@ -1,3 +1,4 @@
+import auth from "~/middleware/auth.global";
 import type { user } from "~/models/auth";
 // import { jwtDecode } from "jwt-decode";
 // import type { JwtPayload } from 'jwt-decode'
@@ -6,10 +7,14 @@ import type { user } from "~/models/auth";
 // }
 
 export const useAuthStore = defineStore('auth', () => {
-    const user = ref()
-    const isauth = computed(() => {
-        return !(user.value == null || undefined)
+    
+    
+    const user = ref(false)
+
+    const is_auth = computed(()=>{
+
     })
+
     // const role = computed(() => {
     //     if (user) {
     //         const decoded = jwtDecode(user.value) as CustomJwtPayload
@@ -34,17 +39,17 @@ export const useAuthStore = defineStore('auth', () => {
     const login = () => {
         const token = useCookie('zat_session')
         console.log(token.value)
-        user.value = token
+        // user.value = token
 
     }
     const logout = () => {
         const token = useCookie('zat_session')
         console.log(token.value)
-        user.value = token
+        // user.value = token
         // user.value = null
     }
     return {
-        user, isauth, login, logout
+        user, login, logout
     }
 
 }, {

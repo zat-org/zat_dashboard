@@ -7,8 +7,10 @@
       <!-- <div > -->
         {{ token }}
       <div class="flex grow h-full w-full">
-        <SideBar v-if="authStore.isauth" />
+        <!-- v-if="authStore.isauth.value == true -->
+        <SideBar  />
         <NuxtPage class="grow w-full" />
+        {{ data.status}}  
       </div>
       <UNotifications />
       <UModals />
@@ -19,7 +21,12 @@
 <script setup lang="ts">
 import { useAuthStore } from "./store/auth";
 const token = useCookie('zat_session')
-const authStore = useAuthStore();
+const authStore =  useAuthStore();
+// const data   =await authStore.isauth()
+//  console.log( data.data)
+//  console.log( data.error)
+const authapi  = useAuth()
+const data = await authapi.is_auth()
 const colorMode = useColorMode();
 colorMode.preference = "dark";
 </script>
