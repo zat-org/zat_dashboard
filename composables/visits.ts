@@ -4,7 +4,7 @@ export const useVisits = () => {
     const { data, pending, error, refresh } = await useAsyncData<{
       data: number;
       message: string;
-    }>("", () => $api("/metrics/visits"));
+    }>("getVisits", () => $api("/metrics/visits"));
     return { data, pending, error, refresh };
   };
   return { getVisits };

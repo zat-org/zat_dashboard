@@ -21,7 +21,7 @@
         <div>
 
           <UButton
-          v-if="!authStore.isauth"
+          v-if="!authStore.user"
             class="text-xl md:text-2xl p-5 rounded-xl cursor-pointer"
             size="xl"
             to="/login"
@@ -39,9 +39,8 @@
   </template>
   <script setup lang="ts">
 import { useAuthStore } from '~/store/auth';
-
+const authApi = useAuth()
 const authStore = useAuthStore()
-
 </script>
   <style scoped>
   .animated-text span {

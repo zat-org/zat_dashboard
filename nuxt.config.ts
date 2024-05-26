@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 export default defineNuxtConfig({
-  devtools: { enabled: false },
+  devtools: { enabled: true },
 
   modules: [
     '@nuxt/ui',
@@ -33,6 +33,9 @@ export default defineNuxtConfig({
       prose: false, // Disable predefined prose components
      
     }
+  },
+  ui:{
+    icons:["mdi","heroicons","icon-park"]
   }
   // postcss: {
   //   plugins: {

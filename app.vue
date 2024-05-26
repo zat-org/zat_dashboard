@@ -3,14 +3,13 @@
     dir="rtl"
     class="h-screen w-full flex flex-col page dark:bg-[#121212] dark">
     <Nav />
-    <UContainer class="w-[90%]  grow pb-5">
+    <UContainer class="w-[90%] grow pb-5">
       <!-- <div > -->
-        {{ token }}
+
       <div class="flex grow h-full w-full">
         <!-- v-if="authStore.isauth.value == true -->
-        <SideBar  />
+        <SideBar />
         <NuxtPage class="grow w-full" />
-        {{ data.status}}  
       </div>
       <UNotifications />
       <UModals />
@@ -20,13 +19,10 @@
 </template>
 <script setup lang="ts">
 import { useAuthStore } from "./store/auth";
-const token = useCookie('zat_session')
-const authStore =  useAuthStore();
-// const data   =await authStore.isauth()
-//  console.log( data.data)
-//  console.log( data.error)
-const authapi  = useAuth()
-const data = await authapi.is_auth()
+
+const authapi = useAuth();
+const data = await authapi.is_auth();
+await data.FetchREQ();
 const colorMode = useColorMode();
 colorMode.preference = "dark";
 </script>

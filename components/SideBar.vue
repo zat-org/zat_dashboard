@@ -1,7 +1,7 @@
 <template>
   <div dir="rtl">
     <USlideover v-model="sideNav.state">
-      <div class="flex justify-between gap-2 m-2" dir="rtl">
+      <!-- <div class="flex justify-between gap-2 m-2" dir="rtl">
         <p class="text-primary">
           {{ user.name?.toString().toUpperCase() }}
         </p>
@@ -10,7 +10,7 @@
             {{ user.role }}
           </UBadge>
         </p>
-      </div>
+      </div> -->
       <UVerticalNavigation :links="links" dir="rtl" />
     </USlideover>
   </div>
@@ -51,40 +51,47 @@ const links = [
   },
 ];
 
-if (user.role == "Super") {
-  links.push(userslink);
-}
+links.push(userslink);
+
 links.push({
   label: "الرسائل",
   icon: "i-heroicons-chat-bubble-bottom-center-text",
   to: "/messages",
   click: sideNav.closeSideNav,
-  labelClass:"",
-  activeClass:""
+  labelClass: "",
+  activeClass: "",
 });
 links.push({
   label: "الاخبار",
   icon: "i-heroicons-newspaper",
   to: "/News",
   click: sideNav.closeSideNav,
-  labelClass:"",
-  activeClass:""
+  labelClass: "",
+  activeClass: "",
 });
 links.push({
   label: " طلبات الحكام",
   icon: "i-heroicons-scale-solid",
   to: "/officiant",
   click: sideNav.closeSideNav,
-  labelClass:"",
-  activeClass:""
+  labelClass: "",
+  activeClass: "",
 });
 links.push({
   label: "الشركاء",
-  icon: "i-heroicons-hand-thumb-up",
+  icon: "i-mdi-partnership",
   to: "/partner",
   click: sideNav.closeSideNav,
-  labelClass:"",
-  activeClass:""
+  labelClass: "",
+  activeClass: "",
+});
+links.push({
+  label: "اليوتيوب",
+  icon: "i-mdi-youtube",
+  to: "/youtube",
+  click: sideNav.closeSideNav,
+  labelClass: "",
+  activeClass: "",
 });
 </script>
 
