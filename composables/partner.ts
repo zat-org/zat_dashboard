@@ -26,7 +26,7 @@ export const usePartner = () => {
   const updatePartner = async () => {
     const formdata = ref<FormData>();
     const id = ref("");
-    const { data, pending, error, refresh, execute } = await useAsyncData(
+    const { data, pending, error, refresh, execute ,status} = await useAsyncData(
       "updatePartner",
       () =>
         $api(`/assets/partner/${id.value}`, {
@@ -36,18 +36,20 @@ export const usePartner = () => {
       { immediate: false }
     );
     const fetchRequest = async (
-      state: Omit<Partner, "logoUrl">,
-      logo: File
+      state: Omit<Partner, "logoUrl"|"id">,
+      _id:string,logo?: File,
     ) => {
       const _formData = new FormData();
       _formData.append("name", state.name);
       _formData.append("siteUrl", state.siteUrl);
-      _formData.append("logo", logo);
+      if(logo){
+        _formData.append("logo", logo);
+      }
       formdata.value = _formData;
-      id.value = state.id;
+      id.value = _id;
       await execute();
     };
-    return { data, pending, error, refresh, fetchRequest };
+    return { data, pending, error, refresh, fetchRequest ,status};
   };
   const getAllPartner = async () => {
     const { data, pending, error, refresh } = await useAsyncData<{message:string,data:Partner[]}>(
@@ -59,16 +61,16 @@ export const usePartner = () => {
 
   const deleteSinglePartner = async () => {
     const id = ref("");
-    const { data, pending, error, refresh, execute } = await useAsyncData(
+    const { data, pending, error, refresh, execute ,status} = await useAsyncData(
       "deleteSinglePartner",
-      () => $api(`/assets/partner/${id}`, { method: "DELETE" }),
+      () => $api(`/assets/partner/${id.value}`, { method: "DELETE" }),
       { immediate: false }
     );
     const fetchRequest = async (_id: string) => {
       id.value = _id;
       await execute();
     };
-    return { data, pending, error, refresh, execute, fetchRequest };
+    return { data, pending, error, refresh, execute, fetchRequest,status };
   };
 
   return { createPartner, getAllPartner, deleteSinglePartner, updatePartner };

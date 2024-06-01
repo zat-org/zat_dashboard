@@ -93,6 +93,23 @@ links.push({
   labelClass: "",
   activeClass: "",
 });
+links.push({
+  label: "اعلانات الصفحة الرئيسية",
+  icon: "i-mdi-advertisements",
+  to: "/HomeAds",
+  click: sideNav.closeSideNav,
+  labelClass: "",
+  activeClass: "",
+});
+
+links.push({
+  label: "social media",
+  icon: "i-mdi-share",
+  to: "/socialMedia",
+  click: sideNav.closeSideNav,
+  labelClass: "",
+  activeClass: "",
+});
 </script>
 
 <style></style>

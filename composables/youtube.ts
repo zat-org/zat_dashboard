@@ -33,7 +33,7 @@ export const useYoutube = () => {
   };
   const removeYoutubeChannel = async () => {
     const id = ref<string>();
-    const { data, pending, error, refresh, execute } = await useAsyncData(
+    const { data, pending, error, refresh, execute ,status} = await useAsyncData(
       "removeYoutubeChannel",
       () => $api(`assets/youtub-channel/${id.value}`, { method: "DELETE" }),
       { immediate: false }
@@ -43,7 +43,7 @@ export const useYoutube = () => {
       await execute();
     };
 
-    return { data, pending, error, refresh, fetchREQ };
+    return { data, pending, error, refresh, fetchREQ,status };
   };
 
   return { getAllYoutubeChannels, addYoutubeChannels, removeYoutubeChannel };

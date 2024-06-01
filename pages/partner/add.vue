@@ -1,14 +1,18 @@
 <template>
   <div class="fkex flex-col grow ">
     <h1 class="text-3xl text-primary  font-semibold">
-      اضافة شريك
+      {{ partnerStore.editmode?"تعدبل شريك":"اضافة شريك" }}
+      
+
     </h1>
-    <PartnerAdd />
+    <PartnerAdd :editmode="partnerStore.editmode" />
   </div>
 </template>
 
 <script lang="ts" setup>
+import { useMyPartnerStore } from '~/store/partner';
 
+const partnerStore =useMyPartnerStore()
 </script>
 
 <style>

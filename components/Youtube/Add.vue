@@ -1,20 +1,24 @@
 <template>
-  <UModal prevent-close>
+  <UModal prevent-close dir="rtl">
     <UForm :state="state" :schema="schema" @submit="onSubmit">
       <UCard>
         <template #header>
           <h1 class="text-2xl text-primary font-semibold">
-            Add New Youtube channel
+            اضافة قناة يوتيوب جديده
           </h1>
         </template>
         <UFormGroup label="id">
-          <UInput
-            v-model="state.id"
-            placeholder="Enter id  for youtube channel" />
+          <UInput v-model="state.id" placeholder="قم بادخال id الخاص بالقناه" />
         </UFormGroup>
         <template #footer>
-          <UButton type="submit" :loading="AddYoutubeChannelREQ.status.value=='pending'" >Add</UButton>
-          <UButton color="red" @click="modal.close()">Cancel</UButton>
+          <div class="flex justify-between gap-5">
+            <UButton
+              type="submit"
+              :loading="AddYoutubeChannelREQ.status.value == 'pending'"
+              >اضافه</UButton
+            >
+            <UButton color="red" @click="modal.close()">الغاء</UButton>
+          </div>
         </template>
       </UCard>
     </UForm>
@@ -39,7 +43,7 @@ const onSubmit = async () => {
   } else if (AddYoutubeChannelREQ.status.value == "error") {
     toast.add({ title: "errro" });
   }
-  modal.close()
+  modal.close();
 };
 </script>
 
