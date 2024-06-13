@@ -11,19 +11,34 @@
           body: { base: 'grow flex ' },
         }">
         <template #header>
-          <div class="flex gap-2 ">
-
-            <span class="text-2xl text-primary font-bold cursor-pointer hover:text-gray-700 duration-300 " @click="navigateTo('/jobs')">
+          <div class="flex gap-2">
+            <span
+              class="text-2xl text-primary font-bold cursor-pointer hover:text-gray-700 duration-300"
+              @click="navigateTo('/jobs')">
               الوظائف /
             </span>
-            <h1 v-if="editmode == true" class="text-2xl text-primary font-semibold"> التعديل علي عرض لوظيفه </h1>
-            <h1 v-if="editmode == false" class="text-2xl text-primary font-semibold">  انشاء عرض وظيفه جديد</h1>
+            <h1
+              v-if="editmode == true"
+              class="text-2xl text-primary font-semibold">
+              التعديل علي عرض لوظيفه
+            </h1>
+            <h1
+              v-if="editmode == false"
+              class="text-2xl text-primary font-semibold">
+              انشاء عرض وظيفه جديد
+            </h1>
           </div>
         </template>
         <div class="grow transition-all duration-300">
           <UFormGroup label="الوظيفه" name="position" size="lg">
             <UInput v-model="state.position" />
           </UFormGroup>
+          <TiptapEditor v-model="data_quill" />
+          {{ data_quill }}
+          <!-- {{ md_test}} -->
+
+       
+
           <UFormGroup label="الملخص" name="brief" size="lg">
             <UTextarea v-model="state.brief" resize />
           </UFormGroup>
@@ -92,10 +107,20 @@
 </template>
 
 <script lang="ts" setup>
+import { QuillEditor } from "@vueup/vue-quill";
+import "@vueup/vue-quill/dist/vue-quill.snow.css";
+// import  TurndownService from 'turndown'
+
+// const turndownService = new TurndownService()
+// const md_test =computed(()=>{
+//   return  turndownService.turndown(data_quill.value)
+// })
+const data_quill = ref("");
 // this component has 2 mode add and update
 import { object, string, array, number } from "yup";
 import { type IJobs } from "~/models/jobs";
 import { parseMarkdown } from "@nuxtjs/mdc/runtime";
+// import TiptapEditor from "../tiptapEditor.vue";
 const preview = ref<boolean>(false);
 const jobApi = useJobAd();
 const route = useRoute();

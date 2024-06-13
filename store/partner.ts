@@ -6,8 +6,8 @@ export const useMyPartnerStore = defineStore("myPartnerStore", () => {
   const reset = () => {
     S_P.value.id = "";
     S_P.value.name = "";
-    S_P.value.name = "";
-    S_P.value.name = "";    
+    S_P.value.siteUrl = "";
+    S_P.value.logoUrl = "";    
   };
   const editmode = computed(()=>{
     return S_P.value.id ?true:false

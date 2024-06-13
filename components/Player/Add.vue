@@ -1,0 +1,276 @@
+<template>
+  <UForm
+    ref="form"
+    :state="state"
+    :schema="schema"
+    @submit="onSubmit"
+    class="flex grow">
+    <UCard class="w-10/12">
+      <div class="flex justify-center gap-5">
+        <!-- name and roles -->
+        <div class="flex flex-col gap-3 grow w-1/2">
+          <UFormGroup label="الاسم" name="name">
+            <UInput v-model="state.name" />
+          </UFormGroup>
+          <UFormGroup label="الفئة" name="roles">
+            <USelectMenu
+              v-model="state.roles"
+              :options="options"
+              multiple
+              placeholder="اختر فئة ">
+              <template #label>
+                <span v-if="state.roles.length" class="truncate">{{
+                  state.roles
+                    .map((r) =>
+                      r.role == 1
+                        ? "لاعب"
+                        : r.role == 2
+                        ? "كابتن"
+                        : r.role == 3
+                        ? "مدرب"
+                        : ""
+                    )
+                    .join(", ")
+                }}</span>
+                <span v-else>اختر الفئة </span>
+              </template>
+              <template #option="{ option }">
+                <span>
+                  {{ option.role == 1 ? "لاعب" : "" }}
+                  {{ option.role == 2 ? "كابتن" : "" }}
+                  {{ option.role == 3 ? "مدرب" : "" }}
+                </span>
+              </template>
+            </USelectMenu>
+          </UFormGroup>
+        </div>
+
+        <div class="flex flex-col gap-3 w-1/2 grow">
+          <div class="flex flex-col gap-3 items-center">
+            <div class="flex flex-row gap-5 items-end justify-center">
+              <UFormGroup label="الصورة" name="imageUrl" class="grow">
+                <UInput
+                  ref="image"
+                  type="file"
+                  accept="image/png, image/jpg, image/jpeg"
+                  v-model="state.imageUrl"
+                  @change="onChange" />
+              </UFormGroup>
+              <div>
+                <UButton
+                  v-if="state.imageUrl"
+                  :icon="
+                    uploadREQ.status.value == 'idle'
+                      ? ' i-mdi-upload'
+                      : uploadREQ.status.value == 'success'
+                      ? 'i-mdi-done'
+                      : uploadREQ.status.value == 'error'
+                      ? 'i-mdi-error'
+                      : ''
+                  "
+                  :loading="uploadREQ.status.value == 'pending'"
+                  @click="onUpload">
+                  {{
+                    uploadREQ.status.value == "success"
+                      ? "done"
+                      : uploadREQ.status.value == "idle"
+                      ? "upload"
+                      : "upload"
+                  }}
+                </UButton>
+              </div>
+            </div>
+            <img
+              class="h-[30vh]"
+              :src="image_url || state.imageUrl"
+              v-if="image_url || state.imageUrl" />
+            <!-- <UAvatar
+           /> -->
+          </div>
+
+          <!-- social media part -->
+          <div>
+            <UButton
+              @click="state.socialMedia.push({ name: '', url: '' })"
+              icon="i-mdi-add">
+              روابط التوصل</UButton
+            >
+          </div>
+          <div class="basis-[30vh] flex-shrink overflow-y-scroll">
+            <div
+              v-for="(sm, index) in state.socialMedia"
+              class="flex flex-col gap-3">
+              <div class="flex gap-3 items-end">
+                <UFormGroup
+                  label="الاسم"
+                  :name="'socialMedia[' + index + '].name'">
+                  <UInput v-model="sm.name" />
+                </UFormGroup>
+                <UFormGroup
+                  label="الرابط"
+                  :name="'socialMedia[' + index + '].url'"
+                  class="grow">
+                  <UInput v-model="sm.url" />
+                </UFormGroup>
+                <div class="">
+                  <UButton
+                    icon="i-mdi-delete"
+                    v-if="index > 0"
+                    color="red"
+                    @click="state.socialMedia.splice(index, 1)">
+                    مسح
+                  </UButton>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- end social media part -->
+      <!-- role paert  -->
+
+      <!-- end role paert  -->
+
+      <template #footer>
+        <div class="flex justify-between">
+          <UButton color="gray" @click="navigateTo('/player')"> عوده </UButton>
+          <UButton type="submit" :loading="addREQ.status.value == 'pending'">
+
+            {{ editmode?'تعديل':'اضافة' }}
+            
+          </UButton>
+        </div>
+      </template>
+    </UCard>
+  </UForm>
+</template>
+
+<script lang="ts" setup>
+import { array, object, string, number } from "yup";
+import type { IPlayer } from "~/models/player";
+const props = defineProps<{ id?: string }>();
+
+const form = ref();
+const image_url = ref();
+const imageApi = useImage();
+const uploadREQ = await imageApi.upload_image();
+const image = ref();
+
+const editmode = computed(() => {
+  return !(props.id === undefined);
+});
+const playerAPi = usePlayer();
+const getPlayer = await playerAPi.getPlayerByID();
+
+const socialMediaSchema = object({
+  name: string().required("this field is required"),
+  url: string()
+    .matches(
+      /^(https?:\/\/)?((([a-zA-Z\d]([a-zA-Z\d-]*[a-zA-Z\d])*)\.)+[a-zA-Z]{2,}|\d{1,3}(\.\d{1,3}){3}|(\[(?:[a-fA-F\d]{1,4}:){7}[a-fA-F\d]{1,4}\]))(:\d+)?(\/[-a-zA-Z\d%_.~+]*)*(\?[;&a-zA-Z\d%_.~+=-]*)?(#[a-zA-Z\d_-]*)?$/i,
+      "this not valid link"
+    )
+    .required("this field is required"),
+});
+const rolesSchema = object({ role: number().required() });
+
+let schema = object({});
+if (editmode.value) {
+  if (props.id) await getPlayer.fetchREQ(props.id);
+  if (getPlayer.status.value == "success") {
+    image_url.value = getPlayer.data.value?.data.imageUrl;
+
+    schema = object({
+      name: string().required(),
+      imageUrl: string(),
+      socialMedia: array().of(socialMediaSchema),
+      roles: array().of(rolesSchema).min(1, "select any one pls "),
+    });
+  }
+} else {
+  schema = object({
+    name: string().required(),
+    imageUrl: string().required(),
+    socialMedia: array().of(socialMediaSchema),
+    roles: array().of(rolesSchema).min(1, "select any one pls "),
+  });
+}
+
+const onUpload = async () => {
+  const image_input = image.value.input as HTMLInputElement;
+  if (image_input.files && image_input.files.length > 0) {
+    console.log("startupload");
+    const image_file = image_input.files[0];
+    await uploadREQ.fetchRequest(image_file);
+    if (uploadREQ.status.value == "success") {
+      console.log(uploadREQ.data.value?.data.url);
+      image_url.value = uploadREQ.data.value?.data.url;
+    }
+  }
+};
+const onChange = async () => {
+  const image_input = image.value.input as HTMLInputElement;
+  if (image_input.files && image_input.files.length > 0) {
+    const imageFile = image_input.files[0];
+    var reader = new FileReader();
+    reader.onloadend = function () {
+      image_url.value = reader.result;
+    };
+    reader.readAsDataURL(imageFile);
+  } else {
+    image_url.value = "";
+  }
+  uploadREQ.status.value = "idle";
+};
+
+const state = reactive<Omit<IPlayer, "id" | "teamId" | "team">>({
+  name:
+    getPlayer.status.value == "success" ? getPlayer.data.value?.data.name! : "",
+  imageUrl: "",
+  // getPlayer.status.value == 'success'?getPlayer.data.value?.data.imageUrl:""
+  socialMedia:
+    getPlayer.status.value == "success"
+      ? getPlayer.data.value?.data.socialMedia!
+      : [{ name: "", url: "" }],
+  roles:
+    getPlayer.status.value == "success"
+      ? getPlayer.data.value?.data.roles!
+      : [],
+});
+const updateREQ = await playerAPi.updatePlayer();
+const addREQ = await playerAPi.addPlayer();
+const playerRoleOptions = playerAPi.getOptionsPlayerRole();
+const options = playerRoleOptions;
+
+const onSubmit = async () => {
+  if (editmode) {
+    console.log(state);
+    console.log(image_url.value);
+    await updateREQ.fetchRequest(state, image_url.value, props.id!);
+    if (addREQ.status.value == "success") {
+      useToast().add({ title: "تم تعديل الاعب بنجاح" });
+      navigateTo("/player");
+    } else if (addREQ.status.value == "error") {
+      useToast().add({ title: "حدث خطاء في تعديل الاعب " });
+    }
+  } else {
+    if (!(uploadREQ.status.value == "success")) {
+      console.log(uploadREQ.status.value);
+      form.value.setErrors([
+        { message: "you should upload", path: "imageUrl" },
+      ]);
+      return;
+    }
+
+    await addREQ.fetchRequest(state, image_url.value);
+    if (addREQ.status.value == "success") {
+      useToast().add({ title: "تم اضافة الاعب بنجاح" });
+      navigateTo("/player");
+    } else if (addREQ.status.value == "error") {
+      useToast().add({ title: "حدث خطاء في اضافة الاعب " });
+    }
+  }
+};
+</script>
+
+<style></style>

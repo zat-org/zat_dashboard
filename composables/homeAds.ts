@@ -71,6 +71,9 @@ export const useHomeAds = () => {
     const fetchRequest = async (_id: string) => {
       id.value = _id;
       await execute();
+      if(status.value=="success"){
+        refreshNuxtData("getAllHomeAds")
+      }
     };
     return { data, pending, error, refresh, execute, fetchRequest, status };
   };

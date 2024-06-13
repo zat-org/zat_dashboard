@@ -11,7 +11,8 @@ export default defineNuxtConfig({
     'nuxt-monaco-editor',
     '@samk-dev/nuxt-vcalendar',
     'nuxt-file-storage',
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+    "nuxt-tiptap-editor"
   ],
   css: ["~/assets/css/base.css"],
   alias: {

@@ -69,6 +69,7 @@ export const usePartner = () => {
     const fetchRequest = async (_id: string) => {
       id.value = _id;
       await execute();
+      refreshNuxtData("getAllPartner")
     };
     return { data, pending, error, refresh, execute, fetchRequest,status };
   };

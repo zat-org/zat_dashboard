@@ -10,7 +10,7 @@
       <UFormGroup label="الصوره" name="logoUrl">
         <UInput
           ref="logo"
-          type="file"
+          type="file" accept="image/png, image/jpg, image/jpeg"
           v-model="state.logoUrl"
           @change="image_change" />
       </UFormGroup>

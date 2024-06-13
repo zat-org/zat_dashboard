@@ -3,23 +3,24 @@
     dir="rtl"
     class="h-screen w-full flex flex-col page dark:bg-[#121212] dark">
     <Nav />
-    <UContainer class="w-[90%] grow pb-5">
-      <!-- <div > -->
+    <div class="flex justify-between grow">
+      <SideBar class="self-start" v-if="useAuthStore().user" />
+      <UContainer class="w-[90%] grow pb-5">
+        <!-- <div > -->
 
-      <div class="flex grow h-full w-full">
-        <!-- v-if="authStore.isauth.value == true -->
-        <SideBar />
-        <NuxtPage class="grow w-full" />
-      </div>
-      <UNotifications />
-      <UModals />
-      <!-- </div> -->
-    </UContainer>
+        <div class="flex grow h-full w-full">
+          <!-- v-if="authStore.isauth.value == true -->
+          <NuxtPage class="grow w-full" />
+        </div>
+        <UNotifications />
+        <UModals />
+        <!-- </div> -->
+      </UContainer>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
 import { useAuthStore } from "./store/auth";
-
 const authapi = useAuth();
 const data = await authapi.is_auth();
 await data.FetchREQ();

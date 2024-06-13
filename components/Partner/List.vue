@@ -65,7 +65,7 @@ const deleteP = async (id: string) => {
     },
   });
 
-  await deletePREQ.fetchRequest(id);
+ 
 };
 const onUpdate = (row: Partner) => {
   // console.log(row);

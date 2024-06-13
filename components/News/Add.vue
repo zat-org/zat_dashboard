@@ -34,7 +34,7 @@
               <UInput
                 @change="display_image"
                 ref="image_input"
-                type="file"
+                type="file" accept="image/png, image/jpg, image/jpeg"
                 size="xl"
                 v-model="state.imageUrl" />
             </UFormGroup>
