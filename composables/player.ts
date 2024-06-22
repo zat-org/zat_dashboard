@@ -36,7 +36,7 @@ export const usePlayer = () => {
     const id = ref<string>();
     let newPlayer = reactive<Omit<IPlayer, "id" | "teamId" | "team">>({
       name: "",
-      imageUrl: "",
+      imageUrl:{old:"",new:""},
       socialMedia: [],
       roles: [{ role: 1 }],
     });
@@ -52,11 +52,22 @@ export const usePlayer = () => {
       );
     const fetchRequest = async (
       new_player: Omit<IPlayer, "id" | "teamId" | "team">,
-      image_url: string,
+      old_image_url: string,
+      new_image_url: string,
       _id: string
     ) => {
       Object.assign(newPlayer, new_player);
-      newPlayer.imageUrl = image_url;
+      newPlayer.imageUrl={old:"",new:""}
+      
+if (newPlayer.imageUrl!== null){
+  if ( typeof newPlayer.imageUrl!=="string" ){
+    newPlayer.imageUrl.new = new_image_url;
+    newPlayer.imageUrl.old= old_image_url;
+  }
+}
+if (newPlayer.imageUrl.new == newPlayer.imageUrl.old ){
+  newPlayer.imageUrl=null
+}
       id.value = _id;
       // console.log(newPlayer)
       await execute();
@@ -110,6 +121,8 @@ export const usePlayer = () => {
     return { data, pending, error, refresh, execute, status, fetchREQ };
   };
   const getOptionsPlayerRole = () => {
+    // return players
+    // test
     return players.map((player) => {
       return { role: player.role };
     });

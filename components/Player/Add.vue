@@ -12,11 +12,13 @@
           <UFormGroup label="الاسم" name="name">
             <UInput v-model="state.name" />
           </UFormGroup>
+          
           <UFormGroup label="الفئة" name="roles">
             <USelectMenu
               v-model="state.roles"
               :options="options"
               multiple
+              by="role"
               placeholder="اختر فئة ">
               <template #label>
                 <span v-if="state.roles.length" class="truncate">{{
@@ -56,7 +58,7 @@
                   v-model="state.imageUrl"
                   @change="onChange" />
               </UFormGroup>
-              <div>
+              <!-- <div>
                 <UButton
                   v-if="state.imageUrl"
                   :icon="
@@ -78,7 +80,7 @@
                       : "upload"
                   }}
                 </UButton>
-              </div>
+              </div> -->
             </div>
             <img
               class="h-[30vh]"
@@ -135,7 +137,7 @@
       <template #footer>
         <div class="flex justify-between">
           <UButton color="gray" @click="navigateTo('/player')"> عوده </UButton>
-          <UButton type="submit" :loading="addREQ.status.value == 'pending'">
+          <UButton type="submit" :loading="addREQ.status.value == 'pending' || uploadREQ.status.value == 'pending'">
 
             {{ editmode?'تعديل':'اضافة' }}
             
@@ -244,7 +246,12 @@ const options = playerRoleOptions;
 
 const onSubmit = async () => {
   if (editmode.value) {
-    await updateREQ.fetchRequest(state, image_url.value, props.id!);
+    // want to check if new image selected 
+    if ((image.value as HTMLInputElement).files && (image.value as HTMLInputElement).files?.length!>0){
+      await onUpload()
+    }
+
+    await updateREQ.fetchRequest(state, getPlayer.data.value?.data.imageUrl!,image_url.value, props.id!);
     if (addREQ.status.value == "success") {
       useToast().add({ title: "تم تعديل الاعب بنجاح" });
       navigateTo("/player");
@@ -252,14 +259,8 @@ const onSubmit = async () => {
       useToast().add({ title: "حدث خطاء في تعديل الاعب " });
     }
   } else {
-    if (!(uploadREQ.status.value == "success")) {
-      console.log(uploadREQ.status.value);
-      form.value.setErrors([
-        { message: "you should upload", path: "imageUrl" },
-      ]);
-      return;
-    }
 
+   await onUpload();
     await addREQ.fetchRequest(state, image_url.value);
     if (addREQ.status.value == "success") {
       useToast().add({ title: "تم اضافة الاعب بنجاح" });

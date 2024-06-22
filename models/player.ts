@@ -3,7 +3,7 @@ import type { IPTeam } from "./team";
 export interface IPlayer {
   id: string;
   name: string;
-  imageUrl: string;
+  imageUrl: string | { old:string;new:string}|null;
   socialMedia: {
     name: string;
     url: string;

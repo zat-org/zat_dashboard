@@ -129,6 +129,15 @@ const links = [
     activeClass:  "",
     exact: false,
   },
+  {
+    label: "الفرق",
+    icon: "i-mdi-user",
+    to: "/team",
+    click: sideNav.closeSideNav,
+    labelClass: "",
+    activeClass:  "",
+    exact: false,
+  },
 ];
 
 
