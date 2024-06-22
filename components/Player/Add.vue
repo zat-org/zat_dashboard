@@ -243,9 +243,7 @@ const playerRoleOptions = playerAPi.getOptionsPlayerRole();
 const options = playerRoleOptions;
 
 const onSubmit = async () => {
-  if (editmode) {
-    console.log(state);
-    console.log(image_url.value);
+  if (editmode.value) {
     await updateREQ.fetchRequest(state, image_url.value, props.id!);
     if (addREQ.status.value == "success") {
       useToast().add({ title: "تم تعديل الاعب بنجاح" });
