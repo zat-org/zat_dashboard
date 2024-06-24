@@ -10,6 +10,7 @@ export default defineAppConfig({
             base: 'flex flex-col  grow border border-primary ',
             background: 'bg-transparent dark:bg-transparent',
             body: { base: 'flex flex-col gap-2 grow' },
-        }
+        },
+        icons:{dynamic:true}
     },
 })

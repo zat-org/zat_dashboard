@@ -12,7 +12,8 @@ export default defineNuxtConfig({
     '@samk-dev/nuxt-vcalendar',
     'nuxt-file-storage',
     '@nuxtjs/tailwindcss',
-    "nuxt-tiptap-editor"
+    "nuxt-tiptap-editor",
+    "@nuxt/icon"
   ],
   css: ["~/assets/css/base.css"],
   alias: {

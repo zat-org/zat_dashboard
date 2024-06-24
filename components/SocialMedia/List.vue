@@ -3,9 +3,13 @@
     <!-- table layout -->
     <UTable :rows="SocialMedia" :columns="columns">
       <template #name-data="{ row }">
-        <ULink class="hover:text-primary" target="_blank" :to="row.accountUrl">
-          {{ row.name }}</ULink
-        >
+        <div class="flex items-center gap-3 ">
+          <UIcon :name="row.icon" class="text-2xl" ></UIcon>
+          <ULink class="hover:text-primary" target="_blank" :to="row.accountUrl">
+            {{ row.name }}</ULink
+          >
+
+        </div>
       </template>
       <template #actions-data="{ row }">
         <div class="flex gap-5">

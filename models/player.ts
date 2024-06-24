@@ -1,12 +1,23 @@
 import type { IPTeam } from "./team";
 
-export interface IPlayer {
-  id: string;
+export interface CreatePlayer {
   name: string;
-  imageUrl: string | { old:string;new:string}|null;
+  imageUrl: string;
   socialMedia: {
     name: string;
     url: string;
+    icon: string;
+  }[];
+}
+
+export interface IPlayer {
+  id: string;
+  name: string;
+  imageUrl: string | { old: string; new: string } | null;
+  socialMedia: {
+    name: string;
+    url: string;
+    icon: string;
   }[];
   roles: {
     role: number;
@@ -15,16 +26,17 @@ export interface IPlayer {
   team: IPTeam;
 }
 export interface ITPlayer {
-    id: string;
+  id: string;
+  name: string;
+  imageUrl: string;
+  socialMedia: {
     name: string;
-    imageUrl: string;
-    socialMedia: {
-      name: string;
-      url: string;
-    }[];
-    roles: {
-      role: number;
-    }[];
-    teamId: string;
-    team: string;
-  }
+    url: string;
+    icon: string;
+  }[];
+  roles: {
+    role: number;
+  }[];
+  teamId: string;
+  team: string;
+}

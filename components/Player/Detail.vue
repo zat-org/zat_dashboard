@@ -10,17 +10,13 @@
         <h2 class="text-primary text-2xl font-semibold">
           {{ player?.name }}
         </h2>
-        <UBadge
-          size="lg"
-          v-for="splayer in players.filter((_player=>{return player?.roles.map((roleobj:any)=>{return roleobj?.role}).includes(_player.role)}))">
-          {{ splayer.name }}
-        </UBadge>
+      
         <!-- <UBadge v-for="item in player?.roles">{{item.role}}</UBadge> -->
       </div>
       <UDivider label="روابط التواصل" />
       <!-- social mediam links -->
       <div class="flex gap-5 justify-center">
-        <UButton  v-for="socialL in player?.socialMedia"   target="_blank" :to="socialL.url">{{ socialL.name }} </UButton >
+        <UButton  v-for="socialL in player?.socialMedia"   target="_blank" :to="socialL.url" :icon="socialL.icon">{{ socialL.name }} </UButton >
       </div>
     </div>
     <template #footer>

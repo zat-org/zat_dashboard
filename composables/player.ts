@@ -1,4 +1,4 @@
-import type { IPlayer, ITPlayer } from "~/models/player";
+import type { CreatePlayer, IPlayer, ITPlayer } from "~/models/player";
 
 export const usePlayer = () => {
   const { $api } = useNuxtApp();
@@ -22,7 +22,7 @@ export const usePlayer = () => {
         { immediate: false }
       );
     const fetchRequest = async (
-      new_player: Omit<IPlayer, "id" | "teamId" | "team">,
+      new_player: CreatePlayer,
       image_url: string
     ) => {
       Object.assign(newPlayer, new_player);
@@ -51,7 +51,7 @@ export const usePlayer = () => {
         { immediate: false }
       );
     const fetchRequest = async (
-      new_player: Omit<IPlayer, "id" | "teamId" | "team">,
+      new_player: CreatePlayer,
       old_image_url: string,
       new_image_url: string,
       _id: string

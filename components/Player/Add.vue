@@ -1,55 +1,15 @@
 <template>
-  <UForm
-    ref="form"
-    :state="state"
-    :schema="schema"
-    @submit="onSubmit"
-    class="flex grow">
+  <UForm :state="state" :schema="schema" @submit="onSubmit" class="flex grow">
     <UCard class="w-10/12">
-      <div class="flex justify-center gap-5">
-        <!-- name and roles -->
-        <div class="flex flex-col gap-3 grow w-1/2">
-          <UFormGroup label="الاسم" name="name">
-            <UInput v-model="state.name" />
-          </UFormGroup>
-          
-          <UFormGroup label="الفئة" name="roles">
-            <USelectMenu
-              v-model="state.roles"
-              :options="options"
-              multiple
-              by="role"
-              placeholder="اختر فئة ">
-              <template #label>
-                <span v-if="state.roles.length" class="truncate">{{
-                  state.roles
-                    .map((r) =>
-                      r.role == 1
-                        ? "لاعب"
-                        : r.role == 2
-                        ? "كابتن"
-                        : r.role == 3
-                        ? "مدرب"
-                        : ""
-                    )
-                    .join(", ")
-                }}</span>
-                <span v-else>اختر الفئة </span>
-              </template>
-              <template #option="{ option }">
-                <span>
-                  {{ option.role == 1 ? "لاعب" : "" }}
-                  {{ option.role == 2 ? "كابتن" : "" }}
-                  {{ option.role == 3 ? "مدرب" : "" }}
-                </span>
-              </template>
-            </USelectMenu>
-          </UFormGroup>
-        </div>
+      <!-- name and roles -->
 
-        <div class="flex flex-col gap-3 w-1/2 grow">
-          <div class="flex flex-col gap-3 items-center">
-            <div class="flex flex-row gap-5 items-end justify-center">
+      <div class="flex flex-col gap-5">
+        <UFormGroup label="الاسم" name="name">
+          <UInput v-model="state.name" />
+        </UFormGroup>
+        <div class="flex gap-5 justify-between">
+          <div class="flex flex-col  gap-3 w-1/2">
+            <div class="flex flex-row gap-5  justify-center">
               <UFormGroup label="الصورة" name="imageUrl" class="grow">
                 <UInput
                   ref="image"
@@ -58,29 +18,6 @@
                   v-model="state.imageUrl"
                   @change="onChange" />
               </UFormGroup>
-              <!-- <div>
-                <UButton
-                  v-if="state.imageUrl"
-                  :icon="
-                    uploadREQ.status.value == 'idle'
-                      ? ' i-mdi-upload'
-                      : uploadREQ.status.value == 'success'
-                      ? 'i-mdi-done'
-                      : uploadREQ.status.value == 'error'
-                      ? 'i-mdi-error'
-                      : ''
-                  "
-                  :loading="uploadREQ.status.value == 'pending'"
-                  @click="onUpload">
-                  {{
-                    uploadREQ.status.value == "success"
-                      ? "done"
-                      : uploadREQ.status.value == "idle"
-                      ? "upload"
-                      : "upload"
-                  }}
-                </UButton>
-              </div> -->
             </div>
             <img
               class="h-[30vh]"
@@ -91,44 +28,54 @@
           </div>
 
           <!-- social media part -->
-          <div>
-            <UButton
-              @click="state.socialMedia.push({ name: '', url: '' })"
-              icon="i-mdi-add">
-              روابط التوصل</UButton
-            >
-          </div>
-          <div class="basis-[30vh] flex-shrink overflow-y-scroll">
-            <div
-              v-for="(sm, index) in state.socialMedia"
-              class="flex flex-col gap-3">
-              <div class="flex gap-3 items-end">
-                <UFormGroup
-                  label="الاسم"
-                  :name="'socialMedia[' + index + '].name'">
-                  <UInput v-model="sm.name" />
-                </UFormGroup>
-                <UFormGroup
-                  label="الرابط"
-                  :name="'socialMedia[' + index + '].url'"
-                  class="grow">
-                  <UInput v-model="sm.url" />
-                </UFormGroup>
-                <div class="">
-                  <UButton
-                    icon="i-mdi-delete"
-                    v-if="index > 0"
-                    color="red"
-                    @click="state.socialMedia.splice(index, 1)">
-                    مسح
-                  </UButton>
+          <div class="flex flex-col gap-3 w-1/2">
+            <div class="flex items-center gap-5">
+              <UButton
+                @click="state.socialMedia.push({ name: '', url: '', icon: '' })"
+                icon="i-mdi-add">
+                روابط التوصل</UButton
+              >
+              <UButton to="https://icon-sets.iconify.design/" target="_blank">
+                اختر الايقونة</UButton
+              >
+            </div>
+            <div class="basis-[30vh] flex-shrink  overflow-y-scroll">
+              <div
+                v-for="(sm, index) in state.socialMedia"
+                class="flex flex-col gap-5 ">
+                <div class="flex gap-3 ">
+                  <UFormGroup
+                    label="الاسم"
+                    :name="'socialMedia[' + index + '].name'">
+                    <UInput v-model="sm.name" />
+                  </UFormGroup>
+                  <UFormGroup
+                    label="الايقونه"
+                    :name="'socialMedia[' + index + '].icon'"
+                    class="grow">
+                    <UInput v-model="sm.icon" />
+                  </UFormGroup>
+                  <UFormGroup
+                    label="الرابط"
+                    :name="'socialMedia[' + index + '].url'"
+                    class="grow">
+                    <UInput v-model="sm.url" />
+                  </UFormGroup>
+                  <div class="self-center ">
+                    <UButton
+                      icon="i-mdi-delete"
+                      v-if="index > 0"
+                      color="red"
+                      @click="state.socialMedia.splice(index, 1)">
+                      مسح
+                    </UButton>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
       <!-- end social media part -->
       <!-- role paert  -->
 
@@ -137,10 +84,13 @@
       <template #footer>
         <div class="flex justify-between">
           <UButton color="gray" @click="navigateTo('/player')"> عوده </UButton>
-          <UButton type="submit" :loading="addREQ.status.value == 'pending' || uploadREQ.status.value == 'pending'">
-
-            {{ editmode?'تعديل':'اضافة' }}
-            
+          <UButton
+            type="submit"
+            :loading="
+              addREQ.status.value == 'pending' ||
+              uploadREQ.status.value == 'pending'
+            ">
+            {{ editmode ? "تعديل" : "اضافة" }}
           </UButton>
         </div>
       </template>
@@ -150,10 +100,9 @@
 
 <script lang="ts" setup>
 import { array, object, string, number } from "yup";
-import type { IPlayer } from "~/models/player";
+import type { CreatePlayer } from "~/models/player";
 const props = defineProps<{ id?: string }>();
 
-const form = ref();
 const image_url = ref();
 const imageApi = useImage();
 const uploadREQ = await imageApi.upload_image();
@@ -173,8 +122,8 @@ const socialMediaSchema = object({
       "this not valid link"
     )
     .required("this field is required"),
+  icon: string().required("this field is required"),
 });
-const rolesSchema = object({ role: number().required() });
 
 let schema = object({});
 if (editmode.value) {
@@ -186,7 +135,6 @@ if (editmode.value) {
       name: string().required(),
       imageUrl: string(),
       socialMedia: array().of(socialMediaSchema),
-      roles: array().of(rolesSchema).min(1, "select any one pls "),
     });
   }
 } else {
@@ -194,7 +142,6 @@ if (editmode.value) {
     name: string().required(),
     imageUrl: string().required(),
     socialMedia: array().of(socialMediaSchema),
-    roles: array().of(rolesSchema).min(1, "select any one pls "),
   });
 }
 
@@ -225,7 +172,7 @@ const onChange = async () => {
   uploadREQ.status.value = "idle";
 };
 
-const state = reactive<Omit<IPlayer, "id" | "teamId" | "team">>({
+const state = reactive<CreatePlayer>({
   name:
     getPlayer.status.value == "success" ? getPlayer.data.value?.data.name! : "",
   imageUrl: "",
@@ -233,38 +180,40 @@ const state = reactive<Omit<IPlayer, "id" | "teamId" | "team">>({
   socialMedia:
     getPlayer.status.value == "success"
       ? getPlayer.data.value?.data.socialMedia!
-      : [{ name: "", url: "" }],
-  roles:
-    getPlayer.status.value == "success"
-      ? getPlayer.data.value?.data.roles!
-      : [],
+      : [{ name: "", url: "", icon: "" }],
 });
 const updateREQ = await playerAPi.updatePlayer();
 const addREQ = await playerAPi.addPlayer();
-const playerRoleOptions = playerAPi.getOptionsPlayerRole();
-const options = playerRoleOptions;
+
 
 const onSubmit = async () => {
   if (editmode.value) {
-    // want to check if new image selected 
-    if ((image.value as HTMLInputElement).files && (image.value as HTMLInputElement).files?.length!>0){
-      await onUpload()
+    // want to check if new image selected
+    if (
+      (image.value as HTMLInputElement).files &&
+      (image.value as HTMLInputElement).files?.length! > 0
+    ) {
+      await onUpload();
     }
 
-    await updateREQ.fetchRequest(state, getPlayer.data.value?.data.imageUrl!,image_url.value, props.id!);
+    await updateREQ.fetchRequest(
+      state,
+      getPlayer.data.value?.data.imageUrl!,
+      image_url.value,
+      props.id!
+    );
     if (addREQ.status.value == "success") {
       useToast().add({ title: "تم تعديل الاعب بنجاح" });
-      navigateTo("/player");
+      return navigateTo("/player");
     } else if (addREQ.status.value == "error") {
       useToast().add({ title: "حدث خطاء في تعديل الاعب " });
     }
   } else {
-
-   await onUpload();
+    await onUpload();
     await addREQ.fetchRequest(state, image_url.value);
     if (addREQ.status.value == "success") {
       useToast().add({ title: "تم اضافة الاعب بنجاح" });
-      navigateTo("/player");
+     return  navigateTo("/player");
     } else if (addREQ.status.value == "error") {
       useToast().add({ title: "حدث خطاء في اضافة الاعب " });
     }
@@ -272,4 +221,8 @@ const onSubmit = async () => {
 };
 </script>
 
-<style></style>
+<style scooped>
+UInput {
+  @apply py-5;
+}
+</style>

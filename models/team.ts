@@ -13,7 +13,13 @@ export interface IPTeam {
     id: string;
     name: string;
     logoUrl: string;
-    establishmentDateUtc: string;
     isZatTeam: boolean;
+    establishmentDateUtc: string;
     players: string[];
   }
+
+export interface AddTeamI {
+  name: string;
+  logoUrl: string;
+  isZatTeam: boolean;
+} 

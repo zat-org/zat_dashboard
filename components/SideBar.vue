@@ -22,7 +22,7 @@ import { useSidenavStore } from "~/store/sidenav";
 
 const sideNav = useSidenavStore();
 const user = useAuthStore();
-const route =useRoute()
+const route = useRoute();
 
 const links = [
   {
@@ -41,9 +41,9 @@ const links = [
     click: sideNav.closeSideNav,
     activeClass: "text-cyan-500",
     exact: false,
-
   },
   {
+
     label: "المستخدمين",
     icon: "i-heroicons-users",
     to: "/users",
@@ -51,7 +51,6 @@ const links = [
     labelClass: "",
     activeClass: "",
     exact: false,
-
   },
   {
     label: "الرسائل",
@@ -61,7 +60,6 @@ const links = [
     labelClass: "",
     activeClass: "",
     exact: false,
-
   },
   {
     label: "الاخبار",
@@ -71,7 +69,6 @@ const links = [
     labelClass: "",
     activeClass: "",
     exact: false,
-
   },
   {
     label: " طلبات الحكام",
@@ -81,7 +78,6 @@ const links = [
     labelClass: "",
     activeClass: "",
     exact: false,
-
   },
   {
     label: "الشركاء",
@@ -91,7 +87,6 @@ const links = [
     labelClass: "",
     activeClass: "",
     exact: false,
-
   },
   {
     label: "اليوتيوب",
@@ -117,7 +112,7 @@ const links = [
     to: "/socialMedia",
     click: sideNav.closeSideNav,
     labelClass: "",
-    activeClass:  "",
+    activeClass: "",
     exact: false,
   },
   {
@@ -126,21 +121,19 @@ const links = [
     to: "/player",
     click: sideNav.closeSideNav,
     labelClass: "",
-    activeClass:  "",
+    activeClass: "",
     exact: false,
   },
   {
     label: "الفرق",
-    icon: "i-mdi-user",
+    icon: "i-ri-team-fill",
     to: "/team",
     click: sideNav.closeSideNav,
     labelClass: "",
-    activeClass:  "",
+    activeClass: "",
     exact: false,
   },
 ];
-
-
 </script>
 
 <style></style>
