@@ -169,7 +169,7 @@ const onChange = async () => {
   } else {
     image_url.value = "";
   }
-  uploadREQ.status.value = "idle";
+
 };
 
 const state = reactive<CreatePlayer>({

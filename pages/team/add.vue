@@ -1,8 +1,8 @@
 <template>
 
-    <div class="flex flex-col gap-`5">
+    <div class="flex  grow flex-col gap-`5">
     <h1>
-
+اضافة فريق جديد
     </h1>
     <TeamAdd />
  

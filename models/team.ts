@@ -23,3 +23,10 @@ export interface AddTeamI {
   logoUrl: string;
   isZatTeam: boolean;
 } 
+export interface TeamI {
+  id:string
+  name: string;
+  logoUrl: string;
+  isZatTeam: boolean;
+  establishmentDateUtc:Date 
+} 

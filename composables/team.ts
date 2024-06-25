@@ -1,12 +1,11 @@
-import type { ITeam } from "~/models/team";
+import type { AddTeamI, ITeam, TeamI } from "~/models/team";
 
 export const useTeam = () => {
   const { $api } = useNuxtApp();
   const addTeam = async () => {
-    const newTeam = reactive<Omit<ITeam, "id" | "players">>({
+    const newTeam = reactive<AddTeamI>({
       name: "",
       logoUrl: "",
-      establishmentDateUtc: "",
       isZatTeam: false,
     });
     const { data, pending, error, refresh, execute, status } =
@@ -17,7 +16,7 @@ export const useTeam = () => {
       );
 
     const fetchREQ = async (
-      new_team: Omit<ITeam, "id" | "players">,
+      new_team: AddTeamI,
       logo_url: string
     ) => {
       Object.assign(newTeam, new_team);
@@ -28,7 +27,7 @@ export const useTeam = () => {
   };
 
   const getAllTeams = async () => {
-    const { data, pending, error, refresh } = await useAsyncData<{data:ITeam[],message:string}>(
+    const { data, pending, error, refresh } = await useAsyncData<{data:TeamI[],message:string}>(
       "getAllTeams",
       () => $api("/tournaments/team")
     );
