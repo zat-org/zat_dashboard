@@ -1,7 +1,7 @@
 <template>
    <div class="flex flex-col gap-`5">
     <h1>
-
+      
     </h1>
     <TeamDetail :id="id" />
   </div>

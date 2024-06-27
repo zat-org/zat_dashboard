@@ -2,21 +2,31 @@
   <UCard>
     <div class="flex flex-col gap-3">
       <!-- avtar and name  -->
-      <div class="flex gap-3 items-center justify-center">
-        <img class="h-[200px] w-[200px] rounded-xl" :src="player?.imageUrl" />
+      <!-- <UAvatar :src="player?.imageUrl"  size="3xl"   imgClass="h-[150px] w-[150px]"/>  -->
+      <div class="flex gap-10">
+        <img class="h-[150px] w-[150px] rounded-full" :src="player?.imageUrl" />
+        <div class="flex flex-col gap-3 justify-center">
+          <h2 class="text-primary text-2xl font-semibold">
+            {{ player?.name }}
+          </h2>
+
+          <div class="flex gap-5 justify-center">
+            <UButton
+              v-for="socialL in player?.socialMedia"
+              target="_blank"
+              :to="socialL.url"
+              :icon="socialL.icon"
+              class="text-2xl">
+            </UButton>
+          </div>
+        </div>
       </div>
-      <UDivider label="معلومات اللاعب" />
-      <div class="flex gap-10 justify-center">
-        <h2 class="text-primary text-2xl font-semibold">
-          {{ player?.name }}
-        </h2>
-      
-        <!-- <UBadge v-for="item in player?.roles">{{item.role}}</UBadge> -->
-      </div>
-      <UDivider label="روابط التواصل" />
-      <!-- social mediam links -->
-      <div class="flex gap-5 justify-center">
-        <UButton  v-for="socialL in player?.socialMedia"   target="_blank" :to="socialL.url" :icon="socialL.icon">{{ socialL.name }} </UButton >
+      <div class="flex justify-center flex-col gap-3">
+        <UButton @click="AddMove" icon="material-symbols:add" class="w-1/3">
+          movment
+        </UButton>
+        <div v-if="player?.team"></div>
+        <div v-else>not in ateam yet</div>
       </div>
     </div>
     <template #footer>
@@ -37,13 +47,14 @@
 
 <script lang="ts" setup>
 import ConfirmationDialog from "../ConfirmationDialog.vue";
+import Transfer from "../Transfer.vue";
 
 const props = defineProps<{ id: string }>();
 const playerApi = usePlayer();
 const toast = useToast();
 const modal = useModal();
 const sPlayer = await playerApi.getPlayerByID();
-await sPlayer.fetchREQ(props.id)
+await sPlayer.fetchREQ(props.id);
 if (sPlayer.status.value == "error") {
   toast.add({ title: "حدث خطا في عملية استرجاع اللاعب" });
   navigateTo("/player");
@@ -72,6 +83,10 @@ const onDelete = async () => {
 
 const onUpdate = () => {
   navigateTo(`/player/update/${props.id}`);
+};
+
+const AddMove = () => {
+  modal.open(Transfer);
 };
 </script>
 

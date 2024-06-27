@@ -36,7 +36,7 @@ export const usePlayer = () => {
     const id = ref<string>();
     let newPlayer = reactive<Omit<IPlayer, "id" | "teamId" | "team">>({
       name: "",
-      imageUrl:{old:"",new:""},
+      imageUrl: { old: "", new: "" },
       socialMedia: [],
       roles: [{ role: 1 }],
     });
@@ -57,17 +57,17 @@ export const usePlayer = () => {
       _id: string
     ) => {
       Object.assign(newPlayer, new_player);
-      newPlayer.imageUrl={old:"",new:""}
-      
-if (newPlayer.imageUrl!== null){
-  if ( typeof newPlayer.imageUrl!=="string" ){
-    newPlayer.imageUrl.new = new_image_url;
-    newPlayer.imageUrl.old= old_image_url;
-  }
-}
-if (newPlayer.imageUrl.new == newPlayer.imageUrl.old ){
-  newPlayer.imageUrl=null
-}
+      newPlayer.imageUrl = { old: "", new: "" };
+
+      if (newPlayer.imageUrl !== null) {
+        if (typeof newPlayer.imageUrl !== "string") {
+          newPlayer.imageUrl.new = new_image_url;
+          newPlayer.imageUrl.old = old_image_url;
+        }
+      }
+      if (newPlayer.imageUrl.new == newPlayer.imageUrl.old) {
+        newPlayer.imageUrl = null;
+      }
       id.value = _id;
       // console.log(newPlayer)
       await execute();

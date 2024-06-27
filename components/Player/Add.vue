@@ -202,10 +202,10 @@ const onSubmit = async () => {
       image_url.value,
       props.id!
     );
-    if (addREQ.status.value == "success") {
+    if (updateREQ.status.value == "success") {
       useToast().add({ title: "تم تعديل الاعب بنجاح" });
       return navigateTo("/player");
-    } else if (addREQ.status.value == "error") {
+    } else if (updateREQ.status.value == "error") {
       useToast().add({ title: "حدث خطاء في تعديل الاعب " });
     }
   } else {

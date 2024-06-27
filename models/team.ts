@@ -30,3 +30,12 @@ export interface TeamI {
   isZatTeam: boolean;
   establishmentDateUtc:Date 
 } 
+export interface updateTeamI{
+ name:string ,
+ logoUrl:{
+  old:string;
+  new:string;
+ }|null;
+ isZatTeam:boolean
+  
+}
