@@ -1,7 +1,7 @@
 export interface IMove {
   playerId: string;
-  fromTeamId?: string;
-  toTeamId?:string ;
-  on?: string ;
-  playerRole?: number;
+  fromTeamId?: string|null;
+  toTeamId?:string|null ;
+  on?: string|null ;
+  playerRole?: number|null;
 }

@@ -1,6 +1,8 @@
 import type { AddTeamI, ITeam, TeamI, updateTeamI } from "~/models/team";
+import { useMyTeamStore } from "~/store/team";
 
 export const useTeam = () => {
+  const teamStore = useMyTeamStore();
   const { $api } = useNuxtApp();
   const addTeam = async () => {
     const newTeam = reactive<AddTeamI>({
@@ -24,8 +26,8 @@ export const useTeam = () => {
   };
 
   const getAllTeams = async () => {
-    const { data, pending, error, refresh } = await useAsyncData<{
-      data: TeamI[];
+    const { data, pending, error, refresh, status } = await useLazyAsyncData<{
+      data: (TeamI | null)[];
       message: string;
     }>("getAllTeams", () => $api("/tournaments/team"));
     return { data, pending, error, refresh };

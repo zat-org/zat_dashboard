@@ -86,7 +86,7 @@ const onUpdate = () => {
 };
 
 const AddMove = () => {
-  modal.open(Transfer);
+  modal.open(Transfer,{player:player.value!});
 };
 </script>
 
