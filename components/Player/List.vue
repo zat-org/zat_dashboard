@@ -5,25 +5,24 @@
         <UInput placeholder="البحث بالاسم " v-model="q_name" />
       </UFormGroup>
       <!-- {{ players }} -->
-    
+
       <UFormGroup label="indep">
         <UToggle v-model="freeplayer" lable="test player" />
       </UFormGroup>
     </div>
-  
+
     <UTable
-      class="grow"
+      class="basis-[40vh] grow"
       :rows="rows"
       :columns="columns"
       :loading="Players.pending.value"
       @select="onSelect">
       <template #name-data="{ row }">
         <div class="flex gap-3 items-center">
-          <UAvatar :src="row.imageUrl" size="xl" />
+          <UAvatar :src="row.imageUrl" size="md" />
           <span class="font-bold">{{ row.name }}</span>
         </div>
       </template>
- 
     </UTable>
     <UPagination
       v-model="page"
@@ -43,9 +42,9 @@ const q_name = ref();
 const q_role = ref<number[]>([]);
 
 const PlayerApi = usePlayer();
-
+const gamePersonApi =useGameperson() 
 const freeplayer = ref(true);
-const Players = await PlayerApi.getAllPlayers(freeplayer);
+const Players = await gamePersonApi.getAllGamePerson(freeplayer);
 const columns = [
   { key: "name", label: " الاسم" },
   { key: "actions", label: "" },
@@ -71,12 +70,11 @@ const nameFilter = computed(() => {
 });
 
 const rows = computed(() => {
-
   return nameFilter.value.slice(
     (page.value - 1) * pageCount,
     page.value * pageCount
   );
 });
-</script> 
+</script>
 
 <style></style>

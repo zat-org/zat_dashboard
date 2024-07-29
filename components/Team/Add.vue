@@ -65,7 +65,7 @@ if (editmode.value && props.id) {
     toast.add({ title: " هذا الفريق غير موجود" });
     navigateTo("/team");
   } else if (getREQ.status.value == "success") {
-    imageUrl.value = getREQ.data.value?.data.logoUrl;
+    imageUrl.value = getREQ.data.value?.data.team.logoUrl;
   }
 }
 let schema = object({});
@@ -85,9 +85,9 @@ if (editmode.value) {
 }
 
 const state = reactive<AddTeamI>({
-  name: editmode.value ? getREQ.data.value?.data.name! : "",
+  name: editmode.value ? getREQ.data.value?.data.team.name! : "",
   logoUrl: "",
-  isZatTeam: editmode.value ? getREQ.data.value?.data.isZatTeam! : false,
+  isZatTeam: editmode.value ? getREQ.data.value?.data.team.isZatTeam! : false,
 });
 const updateREQ = await teamApi.updateTeam();
 const addTeamREQ = await teamApi.addTeam();
@@ -106,8 +106,8 @@ const onSubmit = async () => {
     await updateREQ.fetchREQ(
       state,
       imageUrl.value,
-      getREQ.data.value?.data.logoUrl!,
-      getREQ.data.value?.data.id!
+      getREQ.data.value?.data.team.logoUrl!,
+      getREQ.data.value?.data.team.id!
     );
     if (updateREQ.status.value == "success") {
       toast.add({ title: "update done" });

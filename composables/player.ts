@@ -1,4 +1,11 @@
-import type { CreatePlayer, IPlayer, ITPlayer } from "~/models/player";
+import type {
+  CreatePlayer,
+  IPlayer,
+  Player,
+  PlayerMoves,
+  playerPlainMove,
+  UpdatePlayer,
+} from "~/models/player";
 
 export const usePlayer = () => {
   const { $api } = useNuxtApp();
@@ -9,16 +16,15 @@ export const usePlayer = () => {
   ];
 
   const addPlayer = async () => {
-    let newPlayer = reactive<Omit<IPlayer, "id" | "teamId" | "team">>({
+    let newPlayer = reactive<CreatePlayer>({
       name: "",
       imageUrl: "",
       socialMedia: [],
-      roles: [{ role: 1 }],
     });
     const { data, pending, error, refresh, execute, status } =
       await useAsyncData(
         "addnewPlayer",
-        () => $api("/tournaments/player", { method: "post", body: newPlayer }),
+        () => $api("/player", { method: "post", body: newPlayer }),
         { immediate: false }
       );
     const fetchRequest = async (
@@ -34,17 +40,16 @@ export const usePlayer = () => {
   };
   const updatePlayer = async () => {
     const id = ref<string>();
-    let newPlayer = reactive<Omit<IPlayer, "id" | "teamId" | "team">>({
+    let newPlayer = reactive<UpdatePlayer>({
       name: "",
       imageUrl: { old: "", new: "" },
       socialMedia: [],
-      roles: [{ role: 1 }],
     });
     const { data, pending, error, refresh, execute, status } =
       await useAsyncData(
         "updatePlayer",
         () =>
-          $api(`/tournaments/player/${id.value}`, {
+          $api(`/player/${id.value}`, {
             method: "patch",
             body: newPlayer,
           }),
@@ -75,43 +80,75 @@ export const usePlayer = () => {
     return { data, pending, error, refresh, execute, status, fetchRequest };
   };
 
-  const getAllPlayers = async (indep: Ref<boolean>) => {
-    const { data, pending, error, refresh, status } = await useAsyncData<{
-      data: ITPlayer[];
-      message: string;
-    }>(
-      "getAllPlayers",
-      () =>
-        $api(`/tournaments/player`, {
-          params: { indep: indep.value, minim: false },
-        }),
-      { watch: [indep] }
-      // ?indep=${true}&minim=${true}
-    );
-    return { data, pending, error, refresh, status };
-  };
   const getPlayerByID = async () => {
     const id = ref<string>();
+    const date = ref<Date | null>(new Date());
     const { data, pending, error, refresh, status, execute } =
       await useAsyncData<{
-        data: ITPlayer;
+        data: IPlayer;
         message: string;
-      }>("getPlayerByID", () => $api(`/tournaments/player/${id.value}`), {
-        immediate: false,
-      });
-
-    const fetchREQ = async (_id: string) => {
+      }>(
+        "getPlayerByID",
+        () =>
+          $api(`/player/${id.value}`, {
+            params: { on: date.value ? date.value.toISOString() : null },
+          }),
+        { immediate: false }
+      );
+    const fetchREQ = async (_id: string, _date?: Date) => {
       id.value = _id;
+      if (_date == null) {
+      } else {
+        date.value = _date;
+      }
       await execute();
     };
     return { data, pending, error, refresh, status, execute, fetchREQ };
   };
+  const getPlayerHistory = async (id: string) => {
+    const { data, pending, error, refresh, status, execute } =
+      await useAsyncData<{
+        data: { player: Player; moves: PlayerMoves[] };
+        message: string;
+      }>("getPlayerHistory", () => $api(`player/${id}/move`));
+    const getmovesdate = () => {
+      if (status.value == "success") {
+        return data.value?.data.moves.map((move) => {
+          return move.on;
+        });
+      }
+      return null;
+    };
+    return { data, pending, error, refresh, status, getmovesdate };
+  };
+
+//   const getplayerPlainHistory = async (id: string) => {
+//     const { data, pending, error, refresh, status, execute } =
+//       await useAsyncData<{
+//         data: playerPlainMove[] ;
+//         message: string;
+//       }>("getPlayerPlainHistory", () => $api(`player/${id}/move`));
+ 
+// const getdates = ()=>{
+//   if (status.value =="success" ){
+//     return data.value?.data.map(move=>{
+//       return move.dateUtc
+//     })
+//   }{
+//     return null
+//   }
+
+// }
+
+      
+//     return { data, pending, error, refresh, status, getdates };
+//   };
   const deletePlayer = async () => {
     const id = ref<string>();
     const { data, pending, error, refresh, execute, status } =
       await useAsyncData(
         "deletePlayer",
-        () => $api(`/tournaments/player/${id.value}`, { method: "DELETE" }),
+        () => $api(`/player/${id.value}`, { method: "DELETE" }),
         { immediate: false }
       );
     const fetchREQ = async (_id: string) => {
@@ -129,11 +166,13 @@ export const usePlayer = () => {
   };
   return {
     addPlayer,
-    getAllPlayers,
+    // getAllPlayers,
     getOptionsPlayerRole,
     players,
     getPlayerByID,
     deletePlayer,
     updatePlayer,
+    getPlayerHistory,
+    // getplayerPlainHistory
   };
 };

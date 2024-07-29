@@ -1,4 +1,5 @@
 <template>
+
   <div
     dir="rtl"
     class="h-screen w-full flex flex-col page dark:bg-[#121212] dark">

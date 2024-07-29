@@ -33,11 +33,6 @@
           <UFormGroup label="الوظيفه" name="position" size="lg">
             <UInput v-model="state.position" />
           </UFormGroup>
-          <TiptapEditor v-model="data_quill" />
-          {{ data_quill }}
-          <!-- {{ md_test}} -->
-
-       
 
           <UFormGroup label="الملخص" name="brief" size="lg">
             <UTextarea v-model="state.brief" resize />
@@ -72,6 +67,7 @@
           </div>
         </div>
         <template #footer>
+          <UButton label="open md editor" @click="OpenMDE" />
           <div class="flex justify-between gap-5 items-center overflow-auto">
             <UButton
               icon="i-heroicons-check-20-solid"
@@ -107,21 +103,15 @@
 </template>
 
 <script lang="ts" setup>
-import { QuillEditor } from "@vueup/vue-quill";
-import "@vueup/vue-quill/dist/vue-quill.snow.css";
-// import  TurndownService from 'turndown'
-
-// const turndownService = new TurndownService()
-// const md_test =computed(()=>{
-//   return  turndownService.turndown(data_quill.value)
-// })
-const data_quill = ref("");
 // this component has 2 mode add and update
 import { object, string, array, number } from "yup";
 import { type IJobs } from "~/models/jobs";
 import { parseMarkdown } from "@nuxtjs/mdc/runtime";
+import MDModal from "../MD/Modal.vue";
 // import TiptapEditor from "../tiptapEditor.vue";
 const preview = ref<boolean>(false);
+const modal = useModal();
+const OpenMDE = ()=>{ modal.open(MDModal);}
 const jobApi = useJobAd();
 const route = useRoute();
 const props = defineProps<{ editmode: boolean }>();

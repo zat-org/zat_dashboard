@@ -1,96 +1,68 @@
 <template>
-  <UCard
-    :ui="{
-      base: 'flex flex-col grow  border border-primary ',
-      background: 'bg-transparent dark:bg-transparent',
-      body: { base: 'grow flex flex-col gap-5 text-2xl justify-evenly ' },
-    }">
-    <template #header>
-      <div class="flex justify-between gap-5 items-center">
-        <h1 class="text-3xl text-primary">
-          {{ officiant.fullName }}
-        </h1>
-        <div
-          v-if="officiant.anyPreviousExperience"
-          class="h-[2rem] w-[2rem] flex justify-center items-center text-primary hover:text-gray-500 hover:bg-primary duration-300 rounded-full">
-          <UIcon class="text-3xl" name="i-heroicons-check-badge" />
-        </div>
+  <UCard>
+    <div class="flex gap-10">
+      <img :src="officiant?.imageUrl" class="w-[30vw] h-[30vh] rounded-xl" />
+      <div class="flex flex-col gap-5 items-center">
+        <p class="text-2xl font-semibold text-primary">{{ officiant?.name }}</p>
+        <p class="text-xl">
+          ابتداء التدريب منذ
+          {{ getDuration(officiant?.startOfficiantingOn!) }}
+        </p>
       </div>
-    </template>
-
-    <div class="flex items-center gap-2">
-      <UIcon class="text-2xl text-primary" name="i-heroicons-phone" />
-      <h2 class="text-2xl text-primary font-semibold">رقم الهاتف</h2>
-      <p>{{ officiant.phoneNumber }}</p>
-    </div>
-    <div class="flex items-center gap-2">
-      <UIcon class="text-2xl text-primary" name="i-heroicons-envelope" />
-
-      <h2 class="text-2xl text-primary font-semibold">البريد الالكتروني</h2>
-      <p>{{ officiant.email }}</p>
-    </div>
-    <div class="flex items-center gap-2">
-      <UIcon class="text-2xl text-primary" name="i-heroicons-map-pin" />
-      <h2 class="text-2xl text-primary font-semibold">محل الاقامه</h2>
-      <p>{{ officiant.residenceCity }}</p>
-    </div>
-    <div class="flex items-center gap-2">
-      <UIcon class="text-2xl text-primary" name="i-heroicons-calendar" />
-      <h2 class="text-2xl text-primary font-semibold">تاريخ الميلاد</h2>
-      <p>{{ new Date(officiant.birthDateUtc).toLocaleDateString() }}</p>
-    </div>
-    <div class="flex items-center gap-2">
-      <h2 class="text-2xl text-primary font-semibold">عدد سنوات الخبره</h2>
-      <p>{{ officiant.experienceYears }}</p>
     </div>
     <template #footer>
-      <div class="flex justify-between gap-5">
+      <div class="flex justify-between">
         <UButton color="gray" @click="navigateTo('/officiant')">عودة</UButton>
-        <UButton
-          color="red"
-          icon="i-heroicons-trash"
-          :loading="deleteSingleOfficiant.status.value == 'pending'"
-          @click="onDelete"
-          >حذف</UButton
-        >
+        <div class="flex gap-5">
+          <UButton icon="i-heroicons-cog-8-tooth" color="yellow" @click="onUpdate">تعديل</UButton>
+          <UButton
+            icon="i-heroicons-archive-box-x-mark"
+            color="red"
+            @click="onDelete"
+            >مسح</UButton
+          >
+        </div>
       </div>
     </template>
   </UCard>
 </template>
 
 <script lang="ts" setup>
-import type { OfficiantApply } from "~/models/Officiant";
-const toast = useToast();
+import ConfirmationDialog from "../ConfirmationDialog.vue";
+
 const props = defineProps<{ id: string }>();
-// get apply and check if exist with this id or not exist
-
-const singleOfficicant = await useOfficiant().getSingleOfficiant(props.id);
-
-if (singleOfficicant.status.value == "error") {
-  if (singleOfficicant.error.value?.statusCode == 404) {
-    navigateTo("/officiant");
-  }
+const officiantApi = useOfficiant();
+const toast = useToast();
+const modal = useModal();
+const getREQ = await officiantApi.getOfficiantbyid(props.id);
+if (getREQ.status.value == "success") {
+} else if (getREQ.status.value == "error") {
+  toast.add({ title: "can retrive this officiant " });
+  navigateTo("/officaint");
 }
-if (singleOfficicant.status.value == "success") {
-  // dispaly datat every thing is ok
-}
-const officiant = computed((): OfficiantApply => {
-  return singleOfficicant.data.value?.data!;
+const officiant = computed(() => {
+  return getREQ.data.value?.data;
 });
-const deleteSingleOfficiant = await useOfficiant().deleteSingleOfficiant();
-const onDelete = async () => {
-  await deleteSingleOfficiant.fetchRequest(props.id);
-  if (deleteSingleOfficiant.status.value == "success") {
-    toast.add({ title: "تم حذف الطلب بنجاح" });
-    navigateTo("/officiant");
-  } else if (deleteSingleOfficiant.status.value == "error") {
-    toast.add({ title: "حدث خطا ما" });
-  }
+const getDuration = useDuration().getAllDurations;
+const deleteREQ = await officiantApi.deleteOfficiantbyid();
+const onDelete = () => {
+  modal.open(ConfirmationDialog, {
+    message: "هل تريد مسح هذا الحكم",
+    async onSuccess() {
+      await deleteREQ.fetchREQ(props.id);
+      if (deleteREQ.status.value == "success") {
+        toast.add({ title: "تم مسح هذ الحكم بنجاح" });
+        return navigateTo("/officiant");
+      } else if (deleteREQ.status.value == "error") {
+        toast.add({ title: "حدث خطاء ما في عملية المسح" });
+      }
+      modal.close();
+    },
+  });
 };
+const onUpdate=()=>{
+  return navigateTo(`/officiant/update/${props.id}`)
+}
 </script>
 
-<style>
-p {
-  @apply text-xl;
-}
-</style>
+<style></style>

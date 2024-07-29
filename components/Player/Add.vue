@@ -4,12 +4,25 @@
       <!-- name and roles -->
 
       <div class="flex flex-col gap-5">
-        <UFormGroup label="الاسم" name="name">
-          <UInput v-model="state.name" />
-        </UFormGroup>
+        <div class="flex">
+          <UFormGroup label="الاسم" name="name" class="grow">
+            <UInput v-model="state.name" />
+          </UFormGroup>
+          
+          <!-- <UFormGroup label="الفئة" name="playerRoles" class="w-[200px]">
+            <USelectMenu
+              v-model="state.playerRoles"
+              :options="playerRoleOption"
+              option-attribute="name"
+              value-attribute="id"
+              by="id"
+              multiple 
+               />
+          </UFormGroup> -->
+        </div>
         <div class="flex gap-5 justify-between">
-          <div class="flex flex-col  gap-3 w-1/2">
-            <div class="flex flex-row gap-5  justify-center">
+          <div class="flex flex-col gap-3 w-1/2">
+            <div class="flex flex-row gap-5 justify-center">
               <UFormGroup label="الصورة" name="imageUrl" class="grow">
                 <UInput
                   ref="image"
@@ -39,11 +52,11 @@
                 اختر الايقونة</UButton
               >
             </div>
-            <div class="basis-[30vh] flex-shrink  overflow-y-scroll">
+            <div class="basis-[30vh] flex-shrink overflow-y-scroll">
               <div
                 v-for="(sm, index) in state.socialMedia"
-                class="flex flex-col gap-5 ">
-                <div class="flex gap-3 ">
+                class="flex flex-col gap-5">
+                <div class="flex gap-3">
                   <UFormGroup
                     label="الاسم"
                     :name="'socialMedia[' + index + '].name'">
@@ -61,7 +74,7 @@
                     class="grow">
                     <UInput v-model="sm.url" />
                   </UFormGroup>
-                  <div class="self-center ">
+                  <div class="self-center">
                     <UButton
                       icon="i-mdi-delete"
                       v-if="index > 0"
@@ -101,6 +114,12 @@
 <script lang="ts" setup>
 import { array, object, string, number } from "yup";
 import type { CreatePlayer } from "~/models/player";
+// import { playerRole } from "~/models/player";
+// const playerRoleOption = Object.entries(playerRole)
+// .filter(([key,value]) => typeof value === "number")
+//   .map(([key,value]) => { 
+//      return {name:key as string  , id :value as number  }});
+
 const props = defineProps<{ id?: string }>();
 
 const image_url = ref();
@@ -124,17 +143,22 @@ const socialMediaSchema = object({
     .required("this field is required"),
   icon: string().required("this field is required"),
 });
+const roleSchema = object({
+  role: number(),
+});
 
 let schema = object({});
 if (editmode.value) {
-  if (props.id) await getPlayer.fetchREQ(props.id);
+  if (props.id) {
+    await getPlayer.fetchREQ(props.id);
+  }
   if (getPlayer.status.value == "success") {
     image_url.value = getPlayer.data.value?.data.imageUrl;
-
     schema = object({
       name: string().required(),
       imageUrl: string(),
       socialMedia: array().of(socialMediaSchema),
+      // playerRoles: array().of(roleSchema),
     });
   }
 } else {
@@ -142,6 +166,7 @@ if (editmode.value) {
     name: string().required(),
     imageUrl: string().required(),
     socialMedia: array().of(socialMediaSchema),
+    // playerRoles: array().of(roleSchema),
   });
 }
 
@@ -169,7 +194,6 @@ const onChange = async () => {
   } else {
     image_url.value = "";
   }
-
 };
 
 const state = reactive<CreatePlayer>({
@@ -181,10 +205,13 @@ const state = reactive<CreatePlayer>({
     getPlayer.status.value == "success"
       ? getPlayer.data.value?.data.socialMedia!
       : [{ name: "", url: "", icon: "" }],
+  // playerRoles:
+  //   getPlayer.status.value == "success"
+  //     ? getPlayer.data.value?.data.roles!
+  //     : [],
 });
 const updateREQ = await playerAPi.updatePlayer();
 const addREQ = await playerAPi.addPlayer();
-
 
 const onSubmit = async () => {
   if (editmode.value) {
@@ -198,7 +225,7 @@ const onSubmit = async () => {
 
     await updateREQ.fetchRequest(
       state,
-      getPlayer.data.value?.data.imageUrl!,
+      getPlayer.data.value?.data.imageUrl! as string,
       image_url.value,
       props.id!
     );
@@ -213,7 +240,7 @@ const onSubmit = async () => {
     await addREQ.fetchRequest(state, image_url.value);
     if (addREQ.status.value == "success") {
       useToast().add({ title: "تم اضافة الاعب بنجاح" });
-     return  navigateTo("/player");
+      return navigateTo("/player");
     } else if (addREQ.status.value == "error") {
       useToast().add({ title: "حدث خطاء في اضافة الاعب " });
     }

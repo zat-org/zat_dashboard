@@ -1,4 +1,11 @@
-import type { AddTeamI, ITeam, TeamI, updateTeamI } from "~/models/team";
+import type {
+  AddTeamI,
+  ITeam,
+  LineUpTeamI,
+  TeamI,
+  TransferTeamI,
+  updateTeamI,
+} from "~/models/team";
 import { useMyTeamStore } from "~/store/team";
 
 export const useTeam = () => {
@@ -13,7 +20,7 @@ export const useTeam = () => {
     const { data, pending, error, refresh, execute, status } =
       await useAsyncData(
         "addTeam",
-        () => $api("/tournaments/team", { method: "post", body: newTeam }),
+        () => $api("//team", { method: "post", body: newTeam }),
         { immediate: false }
       );
 
@@ -27,22 +34,35 @@ export const useTeam = () => {
 
   const getAllTeams = async () => {
     const { data, pending, error, refresh, status } = await useLazyAsyncData<{
-      data: (TeamI | null)[];
+      data: TeamI[];
       message: string;
-    }>("getAllTeams", () => $api("/tournaments/team"));
+    }>("getAllTeams", () => $api("/team"));
+    return { data, pending, error, refresh };
+  };
+  const getAllTeamsTransfer = async () => {
+    const { data, pending, error, refresh, status } = await useLazyAsyncData<{
+      data: TransferTeamI[];
+      message: string;
+    }>("getAllTeams", () => $api("/team"));
     return { data, pending, error, refresh };
   };
 
   const getSingleTeam = async () => {
     const id = ref<string>();
+    const to = ref<string>();
     const { data, pending, error, refresh, status, execute } =
-      await useAsyncData<{ data: TeamI; message: string }>(
+      await useAsyncData<{ data: { team: LineUpTeamI }; message: string }>(
         "getSingleTeam",
-        () => $api(`/tournaments/team/${id.value}`),
+        () =>
+          $api(`/team/${id.value}`, {
+            params: { "inc-lineup": true, "inc-plyrs-hist": false },
+            query: { to: to.value ? to.value : null },
+          }),
         { immediate: false }
       );
-    const fetchREQ = async (_id: string) => {
+    const fetchREQ = async (_id: string, _to: Date) => {
       id.value = _id;
+      to.value = _to.toLocaleDateString();
       await execute();
     };
     return { data, pending, error, refresh, fetchREQ, status };
@@ -52,7 +72,7 @@ export const useTeam = () => {
     const { data, pending, error, refresh, status, execute } =
       await useAsyncData(
         "deleteTeam",
-        () => $api(`/tournaments/team/${id.value}`, { method: "delete" }),
+        () => $api(`//team/${id.value}`, { method: "delete" }),
         { immediate: false }
       );
     const fetchREQ = async (_id: string) => {
@@ -76,7 +96,7 @@ export const useTeam = () => {
       await useAsyncData(
         "updateTeam",
         () =>
-          $api(`/tournaments/team/${id.value}`, {
+          $api(`//team/${id.value}`, {
             method: "patch",
             body: newTeam,
           }),
@@ -103,5 +123,12 @@ export const useTeam = () => {
     return { data, pending, error, refresh, fetchREQ, status };
   };
 
-  return { addTeam, getAllTeams, getSingleTeam, deleteTeam, updateTeam };
+  return {
+    addTeam,
+    getAllTeams,
+    getSingleTeam,
+    deleteTeam,
+    updateTeam,
+    getAllTeamsTransfer,
+  };
 };

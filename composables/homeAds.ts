@@ -9,7 +9,7 @@ export const useHomeAds = () => {
         "createNewHomeAds",
         () => $api("/assets/home-ad", { method: "POST", body: formdata.value }),
         { immediate: false }
-      );
+      );  
     const fetchRequest = async (
       state: Omit<IHomeAds, "image" | "id">,
       image: File

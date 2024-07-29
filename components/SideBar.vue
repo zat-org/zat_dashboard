@@ -71,9 +71,18 @@ const links = [
     exact: false,
   },
   {
-    label: " طلبات الحكام",
+    label: "  الحكام",
     icon: "i-heroicons-scale-solid",
     to: "/officiant",
+    click: sideNav.closeSideNav,
+    labelClass: "",
+    activeClass: "",
+    exact: false,
+  },
+  {
+    label: " طلبات الحكام",
+    icon: "i-heroicons-scale-solid",
+    to: "/officiantapplies",
     click: sideNav.closeSideNav,
     labelClass: "",
     activeClass: "",
@@ -133,7 +142,25 @@ const links = [
     activeClass: "",
     exact: false,
   },
+  {
+    label: "البطولات",
+    icon: "hugeicons:champion",
+    to: "/champion",
+    click: sideNav.closeSideNav,
+    labelClass: "",
+    activeClass: "",
+    exact: false,
+  },{
+    label: "المحللين",
+    icon: "mdi:user-search-outline",
+    to: "/analyst",
+    click: sideNav.closeSideNav,
+    labelClass: "",
+    activeClass: "",
+    exact: false,
+  },
 ];
+// hugeicons:champion
 </script>
 
 <style></style>

@@ -10,7 +10,7 @@
         </UFormGroup>
       </div>
       <!-- {{ Filterzat }} -->
-      <UTable :rows="Filterzat" :columns="columns" @select="onSelect" >
+      <UTable :rows="Filterzat" :columns="columns" @select="onSelect"  >
         <template #name-data="{ row }">
           <div class="flex items-center gap-5">
             <UAvatar size="xl" :src="row.logoUrl" />
